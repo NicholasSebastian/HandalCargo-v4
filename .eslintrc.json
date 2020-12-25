@@ -2,8 +2,7 @@
   "env": {
     "browser": true,
     "es2020": true,
-    "node": true,
-    "jest": true
+    "node": true
   },
   "extends": [
     "standard",
@@ -33,7 +32,8 @@
         "ts": "never",
         "tsx": "never"
       }
-    ]
+    ],
+    "semi": "warn"
   },
   "settings": {
     "import/resolver": {

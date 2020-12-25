@@ -14,11 +14,10 @@
     "build:electron": "webpack --config webpack/electron.webpack.js",
     "build:react": "webpack --config webpack/react.webpack.js",
     "package": "npm-run-all build package:dist",
-    "package:dist": "electron-builder --dir",
-    "test": "jest"
+    "package:dist": "electron-builder --dir"
   },
   "keywords": [],
-  "author": "Diego Fernandes <diego.schell.f@gmail.com>",
+  "author": "Nicholas Sebastian + Diego Fernandes",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -31,7 +30,6 @@
     "@testing-library/jest-dom": "^5.11.0",
     "@testing-library/react": "^10.4.3",
     "@types/electron-devtools-installer": "^2.2.0",
-    "@types/jest": "^26.0.3",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.6",
     "@types/styled-components": "^5.1.0",
@@ -40,6 +38,7 @@
     "babel-loader": "^8.1.0",
     "commitizen": "^4.1.2",
     "cross-env": "^7.0.2",
+    "css-loader": "^5.0.1",
     "cz-conventional-changelog": "3.2.0",
     "electron": "^8.2.2",
     "electron-builder": "^22.7.0",
@@ -56,11 +55,12 @@
     "eslint-plugin-standard": "^4.0.1",
     "html-webpack-plugin": "^4.2.0",
     "husky": "^4.2.5",
-    "jest": "^26.1.0",
     "lint-staged": "^10.2.11",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.5",
-    "ts-jest": "^26.1.1",
+    "sass": "^1.30.0",
+    "sass-loader": "^10.1.0",
+    "style-loader": "^2.0.0",
     "typescript": "^3.9.5",
     "wait-on": "^5.0.1",
     "webpack": "^4.42.1",
@@ -69,8 +69,7 @@
   },
   "dependencies": {
     "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "styled-components": "^5.1.1"
+    "react-dom": "^16.13.1"
   },
   "build": {
     "appId": "your.id",
