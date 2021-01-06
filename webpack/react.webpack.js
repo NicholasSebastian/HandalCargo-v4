@@ -27,7 +27,13 @@ module.exports = {
           "css-loader",
           "sass-loader",
         ],
-      }
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif|ttf)$/i,
+        use: {
+          loader: 'file-loader',
+        }
+      },
     ]
   },
   devServer: {
@@ -45,6 +51,8 @@ module.exports = {
     publicPath: './'
   },
   plugins: [
-    new HtmlWebpackPlugin()
+    new HtmlWebpackPlugin({
+      title: "Handal Cargo"
+    })
   ]
 }

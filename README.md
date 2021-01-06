@@ -1,45 +1,35 @@
-## Electron + TypeScript + React
+# Handal Cargo v4
 
-Boilerplate for a project using Electron, React and Typescript
+The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP system.
 
-## Installation
+## To Do List
 
-Use a package manager of your choice (npm, yarn, etc.) in order to install all dependencies
+- [x] Feature: Abstractions for management of window and database connection processes.
+- [ ] Fix: Find a better way to keep the connection alive.
+- [x] Feature: Login Screen and Functionality.
+- [ ] Feature: Encryption for passwords.
+- [x] Feature: Layout for the main application window.
+  - Header with Profile Button and Dropdown, etc.
+  - Sidebar with navigation links.
+- [ ] Fix: Changing language or theme closes the currently open page.
+- [ ] Feature: Lock the sidebar links according to access level.
+  - L1: Shipping and References Page.
+  - L2: L1 + Reports Page.
+  - L3: L2 + Master and Settings Page.
+- [x] Feature: Tabs
+- [ ] Fix: Switch to '/' page when closing the currently open tab.
+- [ ] Content: All the pages.
+  - UI tables for each table in the database.
+  - Add, modify, delete functionality.
+  - Search and filter functionality.
+- [ ] Feature: Welcome screen varies depending on access level.
+  - L1: Welcome screen.
+  - L2/L3: Dashboard.
+- [ ] Feature: Header utilities (e.g. calculator and notes)
+- [ ] Feature: Basic email.
+- [ ] Other: Change the image on the login page.
+- [ ] Other: Add the color scheme for the dark theme.
+- [ ] Feature: Write/read data to/from a JSON file for local database connection settings.
+- [ ] Other: Figure out a way to backup/restore database outside of cPanel.
 
-```bash
-npm install
-```
-
-```bash
-yarn install
-```
-
-## Usage
-
-In order to run this project 2 scripts will need to be executed `dev:react` and `dev:electron`, run each one in a different terminal and always run `dev:react` before `dev:electron`, or `dev` to run them in order automatically
-
-```bash
-npm run dev:react
-```
-
-```bash
-npm run dev:electron
-```
-
-or
-
-```bash
-npm run dev
-```
-
-## Packaging
-
-To generate a project package run `package`
-
-```bash
-npm run package
-```
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
+Note: List is still incomplete.

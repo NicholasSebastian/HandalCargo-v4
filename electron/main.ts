@@ -1,47 +1,25 @@
-import { app, BrowserWindow } from 'electron'
-import * as path from 'path'
-import * as url from 'url'
-import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer'
+import { app, ipcMain } from 'electron'
 
-let mainWindow: Electron.BrowserWindow | null
+import Window from './window'
+import Connection from './database'
 
-function createWindow () {
-  mainWindow = new BrowserWindow({
-    width: 1100,
-    height: 700,
-    backgroundColor: '#191622',
-    webPreferences: {
-      nodeIntegration: true
-    }
+export let windowInstance: Window
+export let connectionInstance: Connection
+
+app.on('ready', () => {
+  windowInstance = new Window()
+
+  ipcMain.on('connect', (event) => {
+    connectionInstance = new Connection(event)
+
+    // login/logout functionality
+    ipcMain.on('login', (event, username, password) => connectionInstance.onLogin(event, username, password))
+    ipcMain.on('logout', () => windowInstance.onLogout())
+
+    // database query functionality
+    ipcMain.on('query', (event, query, values, replyKey) => connectionInstance.query(event, query, values, replyKey))
+    ipcMain.on('querySync', (event, query, values) => connectionInstance.querySync(event, query, values))
   })
+})
 
-  if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL('http://localhost:4000')
-  } else {
-    mainWindow.loadURL(
-      url.format({
-        pathname: path.join(__dirname, 'renderer/index.html'),
-        protocol: 'file:',
-        slashes: true
-      })
-    )
-  }
-
-  mainWindow.on('closed', () => {
-    mainWindow = null
-  })
-}
-
-app.on('ready', createWindow)
-  .whenReady()
-  .then(() => {
-    if (process.env.NODE_ENV === 'development') {
-      installExtension(REACT_DEVELOPER_TOOLS)
-        .then((name) => console.log(`Added Extension:  ${name}`))
-        .catch((err) => console.log('An error occurred: ', err))
-      installExtension(REDUX_DEVTOOLS)
-        .then((name) => console.log(`Added Extension:  ${name}`))
-        .catch((err) => console.log('An error occurred: ', err))
-    }
-  })
 app.allowRendererProcessReuse = true

@@ -1,7 +1,7 @@
 {
-  "name": "electron-react-typescript",
-  "version": "1.0.0",
-  "description": "An Electron boilerplate including TypeScript, React, Jest and ESLint.",
+  "name": "handal-cargo",
+  "version": "4.0.0",
+  "description": "Handal Cargo proprietary ERP software.",
   "main": "./dist/main.js",
   "scripts": {
     "dev": "npm-run-all -p dev:react electron:serve",
@@ -17,10 +17,11 @@
     "package:dist": "electron-builder --dir"
   },
   "keywords": [],
-  "author": "Nicholas Sebastian + Diego Fernandes",
-  "license": "MIT",
+  "author": "Nicholas Sebastian + Jacky Richie Bahary",
+  "license": "SEE LICENSE IN LICENSE",
   "devDependencies": {
     "@babel/core": "^7.9.0",
+    "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
@@ -32,6 +33,7 @@
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.6",
+    "@types/react-router-dom": "^5.1.7",
     "@types/styled-components": "^5.1.0",
     "@typescript-eslint/eslint-plugin": "^3.4.0",
     "@typescript-eslint/parser": "^3.4.0",
@@ -53,13 +55,12 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.20.1",
     "eslint-plugin-standard": "^4.0.1",
+    "file-loader": "^6.2.0",
     "html-webpack-plugin": "^4.2.0",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.5",
-    "sass": "^1.30.0",
-    "sass-loader": "^10.1.0",
     "style-loader": "^2.0.0",
     "typescript": "^3.9.5",
     "wait-on": "^5.0.1",
@@ -68,8 +69,14 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "@fortawesome/react-fontawesome": "^0.1.14",
+    "mariadb": "^2.5.2",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "styled-components": "^5.2.1"
   },
   "build": {
     "appId": "your.id",
