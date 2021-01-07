@@ -23,16 +23,16 @@ const Login = (): JSX.Element => {
         <div>
           <div>Handal Cargo</div>
           <h1>Log In</h1>
-          <label>{localize('Username')}</label>
+          <label>{localize('username')}</label>
           <input type="text" placeholder="Username"
             onChange={e => setUsername(e.target.value)} />
-          <label>{localize('Password')}</label>
+          <label>{localize('password')}</label>
           <input type="password" placeholder="Password"
             onChange={e => setPassword(e.target.value)} />
           <Button onClick={() => {
             setView(<Loading/>)
             ipcRenderer.send('login', username, password)
-          }}>{localize('Login')}</Button>
+          }}>{localize('login')}</Button>
           <div>© Handal Cargo, All rights reserved.</div>
         </div>
       </StyledLogin>

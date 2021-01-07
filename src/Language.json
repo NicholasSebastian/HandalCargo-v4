@@ -1,43 +1,154 @@
 {
-    "Username" : "Nama Pengguna",
-    "Password" : "Kata Sandi",
-    "Login" : "Masuk",
-
-    "Good morning" : "Selamat pagi",
-    "Good afternoon" : "Selamat siang",
-    "Good evening" : "Selamat sore",
-    "Good night" : "Selamat malam",
-    "Today is" : "Hari ini tanggal",
-    "It is now" : "Sekarang",
-
-    "Shipping" : "Pengiriman",
-    "Sea Freight" : "Angkutan Laut",
-    "Air Cargo" : "Kargo Udara",
-    "Invoice Entry" : "Entri Faktur",
-    "Payment" : "Pembayaran",
-    "Customers" : "Pelanggan",
-
-    "References" : "Referensi",
-    "Container Groups" : "",
-    "Carriers" : "",
-    "Routes" : "Rute",
-    "Handlers" : "Pengurus",
-    "Planes" : "",
-    "Currencies" : "Mata Uang",
-    "Product Details" : "",
-    "Expeditions" : "Expedisi",
-
-    "Reports" : "Laporan",
-    "Dashboard" : "Dasbor",
-    "Payroll" : "Daftar Gaji",
-
-    "Master" : "",
-    "Staff" : "Staf",
-    "Staff Groups" : "Kelompok Staf",
-    "Access Levels" : "Tingkat Akses",
-    "Company Setup" : "",
-
-    "Settings" : "Pengaturan",
-    "Database Setup" : "",
-    "Backup and Restore" : ""
+    "username": {
+        "en": "Username",
+        "id": "Nama Pengguna"
+    },
+    "password": {
+        "en": "Password",
+        "id": "Kata Sandi"
+    },
+    "login": {
+        "en": "Login",
+        "id": "Masuk"
+    },
+    "gMorning": {
+        "en": "Good morning",
+        "id": "Selamat pagi"
+    },
+    "gAfternoon": {
+        "en": "Good afternoon",
+        "id": "Selamat siang"
+    },
+    "gEvening": {
+        "en": "Good evening",
+        "id": "Selamat sore"
+    },
+    "gNight": {
+        "en": "Good night",
+        "id": "Selamat malam"
+    },
+    "gToday": {
+        "en": "Today is",
+        "id": "Hari ini tanggal"
+    },
+    "gNow": {
+        "en": "It is now",
+        "id": "Sekarang"
+    },
+    "shipping": {
+        "en": "Shipping",
+        "id": "Pengiriman"
+    },
+    "seaFreight": {
+        "en": "Sea Freight",
+        "id": "Angkutan Laut"
+    },
+    "airCargo": {
+        "en": "Air Cargo",
+        "id": "Kargo Udara"
+    },
+    "invoiceEntry": {
+        "en": "Invoice Entry",
+        "id": "Entri Faktur"
+    },
+    "payment": {
+        "en": "Payment",
+        "id": "Pembayaran"
+    },
+    "customers": {
+        "en": "Customers",
+        "id": "Pelanggan"
+    },
+    "references": {
+        "en": "References",
+        "id": "Referensi"
+    },
+    "containerGroups": {
+        "en": "Container Groups",
+        "id": ""
+    },
+    "carriers": {
+        "en": "Carriers",
+        "id": ""
+    },
+    "routes": {
+        "en": "Routes",
+        "id": "Rute"
+    },
+    "handlers": {
+        "en": "Handlers",
+        "id": "Pengurus"
+    },
+    "planes": {
+        "en": "Planes",
+        "id": ""
+    },
+    "currencies": {
+        "en": "Currencies",
+        "id": "Mata Uang"
+    },
+    "productDetails": {
+        "en": "Product Details",
+        "id": ""
+    },
+    "expeditions": {
+        "en": "Expeditions",
+        "id": "Expedisi"
+    },
+    "reports": {
+        "en": "Reports",
+        "id": "Laporan"
+    },
+    "dashboard": {
+        "en": "Dashboard",
+        "id": "Dasbor"
+    },
+    "payroll": {
+        "en": "Payroll",
+        "id": "Daftar Gaji"
+    },
+    "master": {
+        "en": "Master",
+        "id": ""
+    },
+    "staff": {
+        "en": "Staff",
+        "id": "Staf"
+    },
+    "staffGroups": {
+        "en": "Staff Groups",
+        "id": ""
+    },
+    "accessLevels": {
+        "en": "Access Levels",
+        "id": "Tingkat Akses"
+    },
+    "companySetup": {
+        "en": "Company Setup",
+        "id": ""
+    },
+    "settings": {
+        "en": "Settings",
+        "id": "Pengaturan"
+    },
+    "databaseSetup": {
+        "en": "Database Setup",
+        "id": ""
+    },
+    "backupRestore": {
+        "en": "Backup and Restore",
+        "id": ""
+    },
+    "theme": {
+        "en": "Theme",
+        "id": ""
+    },
+    "language": {
+        "en": "Language",
+        "id": "Bahasa"
+    },
+    "logoutExit": {
+        "en": "Logout and Exit",
+        "id": ""
+    }
 }

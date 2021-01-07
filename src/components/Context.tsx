@@ -2,60 +2,48 @@
 import React, { useState, useEffect, createContext } from 'react'
 import { DefaultTheme, ThemeProvider } from 'styled-components'
 
+import themes from '../Themes.json'
 import data from '../Language.json'
-
-const themes: Theme = {
-  Light: {
-    accent: '#028de0',
-    fgStrong: '#2a445e',
-    fgMid: '#70859a',
-    fgWeak: '#d7dde3',
-    bg: '#ffffff',
-    bgDilute: '#f4f8f9',
-    green: '#34b47e',
-    yellow: '#f8964b',
-    red: '#eb5756'
-  },
-  Dark: {
-    accent: '',
-    fgStrong: '',
-    fgMid: '',
-    fgWeak: '',
-    bg: '',
-    bgDilute: '',
-    green: '#34b47e',
-    yellow: '#f8964b',
-    red: '#eb5756'
-  }
-}
 
 export const Settings = createContext<Settings | null>(null)
 
 const Context = ({ children }: ContextProps): JSX.Element => {
-  const lastTheme = window.localStorage.getItem('Theme')
-  const lastLang = window.localStorage.getItem('Language')
+  const lastTheme = window.localStorage.getItem('Theme') as ThemeType
+  const lastLang = window.localStorage.getItem('Language') as LangType
 
-  const [theme, setTheme] = useState(lastTheme ?? 'Light')
-  const [lang, setLang] = useState(lastLang ?? 'en')
+  const [theme, setTheme] = useState<ThemeType>(lastTheme ?? 'Light')
+  const [lang, setLang] = useState<LangType>(lastLang ?? 'en')
 
   useEffect(() => window.localStorage.setItem('Theme', theme), [theme])
   useEffect(() => window.localStorage.setItem('Language', lang), [lang])
 
-  function localize (text: string): string {
-    return lang === 'en' ? text : data[text]
+  function localize (key: string): string {
+    const local = (data as LangData)[key]
+    return local ? local[lang] : key
   }
 
   return (
     <Settings.Provider value={{ theme, setTheme, lang, setLang, localize }}>
-      <ThemeProvider theme={themes[theme]}>{children}</ThemeProvider>
+      <ThemeProvider theme={(themes as Theme)[theme]}>{children}</ThemeProvider>
     </Settings.Provider>
   )
 }
 
 export default Context
 
+type ThemeType = 'Light' | 'Dark'
+type LangType = 'en' | 'id'
+
 interface Theme {
-  [key: string]: DefaultTheme
+  Light: DefaultTheme,
+  Dark: DefaultTheme
+}
+
+interface LangData {
+  [key: string]: {
+    en: string,
+    id: string
+  }
 }
 
 interface ContextProps {
@@ -65,7 +53,7 @@ interface ContextProps {
 interface Settings {
   theme: string,
   lang: string,
-  setTheme: React.Dispatch<React.SetStateAction<string>>,
-  setLang: React.Dispatch<React.SetStateAction<string>>,
+  setTheme: React.Dispatch<React.SetStateAction<ThemeType>>,
+  setLang: React.Dispatch<React.SetStateAction<LangType>>,
   localize: Function
 }

@@ -15,12 +15,12 @@ const Welcome = (): JSX.Element => {
 
   const greeting =
     now.current.getHours() < 12
-      ? localize('Good morning')
+      ? localize('gMorning')
       : now.current.getHours() < 15
-        ? localize('Good afternoon')
+        ? localize('gAfternoon')
         : now.current.getHours() < 18
-          ? localize('Good evening')
-          : localize('Good night')
+          ? localize('gEvening')
+          : localize('gNight')
 
   const timeString = now.current.toLocaleTimeString('en-US')
   const dateString = now.current.toLocaleDateString('en-US', {
@@ -30,8 +30,8 @@ const Welcome = (): JSX.Element => {
   return (
     <StyledWelcome>
       <div>{greeting} {staffname}.</div>
-      <div>{localize('Today is')} {dateString}.</div>
-      <div>{localize('It is now')} {timeString}.</div>
+      <div>{localize('gToday')} {dateString}.</div>
+      <div>{localize('gNow')} {timeString}.</div>
     </StyledWelcome>
   )
 }

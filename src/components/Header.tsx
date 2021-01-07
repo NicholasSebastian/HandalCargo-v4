@@ -31,27 +31,24 @@ const ProfileButton = ({ updateTab }: HeaderProps): JSX.Element => {
 }
 
 const ProfileDropDown = (): JSX.Element => {
-  const { lang, theme, setLang, setTheme } = useContext(Settings)!
+  const { lang, theme, setLang, setTheme, localize } = useContext(Settings)!
   return (
-    <StyledDropdown>
-      <button onClick={e => {
-        e.stopPropagation()
+    <StyledDropdown onClick={e => e.stopPropagation()}>
+      <button onClick={() => {
         setTheme(theme === 'Light' ? 'Dark' : 'Light')
       }}>
-        Theme: {theme}
+        {localize('theme')}: {theme}
       </button>
-      <button onClick={e => {
-        e.stopPropagation()
+      <button onClick={() => {
         setLang(lang === 'en' ? 'id' : 'en')
       }}>
-        Language: {lang.toUpperCase()}
+        {localize('language')}: {lang.toUpperCase()}
       </button>
       <hr/>
-      <button onClick={e => {
-        e.stopPropagation()
+      <button onClick={() => {
         ipcRenderer.send('logout')
       }}>
-        Log Out and Exit
+        {localize('logoutExit')}
       </button>
     </StyledDropdown>
   )

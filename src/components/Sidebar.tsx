@@ -13,37 +13,37 @@ import toDashCase from '../utils/ToDashCase'
 const elements: Array<SidebarElement> = [
   {
     buttonIcon: faBoxOpen,
-    buttonName: 'Shipping',
+    buttonName: 'shipping',
     subButtonNames: [
-      'Sea Freight', 'Air Cargo', 'Invoice Entry', 'Payment', 'Customers'
+      'seaFreight', 'airCargo', 'invoiceEntry', 'payment', 'customers'
     ]
   },
   {
     buttonIcon: faThLarge,
-    buttonName: 'References',
+    buttonName: 'references',
     subButtonNames: [
-      'Container Groups', 'Carriers', 'Routes', 'Handlers', 'Planes', 'Currencies', 'Product Details', 'Expeditions'
+      'containerGroups', 'carriers', 'routes', 'handlers', 'planes', 'currencies', 'productDetails', 'expeditions'
     ]
   },
   {
     buttonIcon: faCopy,
-    buttonName: 'Reports',
+    buttonName: 'reports',
     subButtonNames: [
-      'Dashboard', 'Payroll'
+      'dashboard', 'payroll'
     ]
   },
   {
     buttonIcon: faUser,
-    buttonName: 'Master',
+    buttonName: 'master',
     subButtonNames: [
-      'Staff', 'Staff Groups', 'Access Levels', 'Company Setup'
+      'staff', 'staffGroups', 'accessLevels', 'companySetup'
     ]
   },
   {
     buttonIcon: faCog,
-    buttonName: 'Settings',
+    buttonName: 'settings',
     subButtonNames: [
-      'Database Setup', 'Backup and Restore'
+      'databaseSetup', 'backupRestore'
     ]
   }
 ]

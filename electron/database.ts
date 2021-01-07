@@ -9,11 +9,11 @@ import { windowInstance } from './main'
 
 const DB_PING_INTERVAL = 60000
 const connectionSettings = {
-  host: '',
+  host: '101.50.1.10',
   port: 3306,
   database: 'dhicom_handalcargo',
-  user: '',
-  password: ''
+  user: 'dhicom_app',
+  password: 'handalcargo'
 }
 
 class Connection {
@@ -38,7 +38,7 @@ class Connection {
         })
         .catch(Connection.handleQueryFailure)
     } else {
-      Connection.handleConnectionBreak()
+      Connection.handleConnectionError()
     }
   }
 
@@ -53,7 +53,7 @@ class Connection {
           event.returnValue = null
         })
     } else {
-      Connection.handleConnectionBreak()
+      Connection.handleConnectionError()
     }
   }
 
@@ -91,29 +91,29 @@ class Connection {
     setInterval(() => {
       console.log('Pinging the database server.')
       this.connection?.ping()
+        .catch(Connection.handleConnectionError)
     }, DB_PING_INTERVAL)
   }
 
-  private static handleConnectionError (error: mariadb.SqlError) {
-    if (error.code === 'ECONNREFUSED') {
-      dialog.showMessageBoxSync({
-        message: 'Connection Refused',
-        detail: 'There was a problem connecting to the database server.'
-      })
+  private static handleConnectionError (error?: mariadb.SqlError) {
+    if (error) {
+      if (error.code === 'ECONNREFUSED') {
+        dialog.showMessageBoxSync({
+          message: 'Connection Refused',
+          detail: 'There was a problem connecting to the database server.'
+        })
+      } else {
+        dialog.showMessageBoxSync({
+          message: 'Fatal Error occured',
+          detail: error.message
+        })
+      }
     } else {
       dialog.showMessageBoxSync({
-        message: 'Fatal Error occured',
-        detail: error.message
+        message: 'Connection ended',
+        detail: 'Connection with database unexpectedly is no longer valid.'
       })
     }
-    windowInstance.window?.close()
-  }
-
-  private static handleConnectionBreak () {
-    dialog.showMessageBoxSync({
-      message: 'Connection ended',
-      detail: 'Connection with database unexpectedly is no longer valid.'
-    })
     windowInstance.window?.close()
   }
 

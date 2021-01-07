@@ -1,0 +1,24 @@
+{
+    "Light": {
+      "accent": "#028de0",
+      "fgStrong": "#2a445e",
+      "fgMid": "#70859a",
+      "fgWeak": "#d7dde3",
+      "bg": "#ffffff",
+      "bgDilute": "#f4f8f9",
+      "green": "#34b47e",
+      "yellow": "#f8964b",
+      "red": "#eb5756"
+    },
+    "Dark": {
+      "accent": "",
+      "fgStrong": "",
+      "fgMid": "",
+      "fgWeak": "",
+      "bg": "",
+      "bgDilute": "",
+      "green": "#34b47e",
+      "yellow": "#f8964b",
+      "red": "#eb5756"
+    }
+  }

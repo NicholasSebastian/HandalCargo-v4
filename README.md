@@ -11,6 +11,9 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
 - [x] Feature: Layout for the main application window.
   - Header with Profile Button and Dropdown, etc.
   - Sidebar with navigation links.
+- [x] Context wrapper for theme and languages.
+- [ ] Other: Add the color scheme for the dark theme.
+- [ ] Other: Complete the localization translation map.
 - [ ] Fix: Changing language or theme closes the currently open page.
 - [ ] Feature: Lock the sidebar links according to access level.
   - L1: Shipping and References Page.
@@ -22,13 +25,14 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
   - UI tables for each table in the database.
   - Add, modify, delete functionality.
   - Search and filter functionality.
+- [ ] Feature: Dashboard
 - [ ] Feature: Welcome screen varies depending on access level.
   - L1: Welcome screen.
   - L2/L3: Dashboard.
+- [ ] Feature: Formatted PDF report generation, printing functionality.
 - [ ] Feature: Header utilities (e.g. calculator and notes)
 - [ ] Feature: Basic email.
 - [ ] Other: Change the image on the login page.
-- [ ] Other: Add the color scheme for the dark theme.
 - [ ] Feature: Write/read data to/from a JSON file for local database connection settings.
 - [ ] Other: Figure out a way to backup/restore database outside of cPanel.
 
