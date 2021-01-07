@@ -6,15 +6,9 @@ import mariadb from 'mariadb'
 import '@babel/polyfill'
 
 import { windowInstance } from './main'
+import connectionSettings from './Connection.json'
 
 const DB_PING_INTERVAL = 60000
-const connectionSettings = {
-  host: '101.50.1.10',
-  port: 3306,
-  database: 'dhicom_handalcargo',
-  user: 'dhicom_app',
-  password: 'handalcargo'
-}
 
 class Connection {
   connection: mariadb.Connection | undefined
