@@ -46,7 +46,6 @@ const Login = (): JSX.Element => {
     ipcRenderer.send('connect')
 
     ipcRenderer.once('login-success', (event, profileInfo) => {
-      console.log(profileInfo)
       window.sessionStorage.setItem('Profile', JSON.stringify(profileInfo))
       setView(<Layout />)
       ipcRenderer.removeAllListeners('login-failed')
@@ -75,15 +74,18 @@ const StyledLogin = styled.div`
     padding: 25px 50px 0 50px;
 
     > div:first-child {
+      color: ${({ theme }) => theme.fgStrong};
       text-align: right;
       margin-bottom: 50px;
     }
 
     > h1 {
+      color: ${({ theme }) => theme.fgStrong};
       margin-bottom: 40px;
     }
 
     > label {
+      color: ${({ theme }) => theme.fgStrong};
       font-size: 12px;
       margin-bottom: 5px;
       display: block;
@@ -112,6 +114,7 @@ const StyledLogin = styled.div`
     }
 
     > div:last-child {
+      color: ${({ theme }) => theme.fgStrong};
       text-align: center;
       font-size: 11px;
     }

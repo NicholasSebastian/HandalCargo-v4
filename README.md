@@ -15,6 +15,7 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
 - [ ] Other: Add the color scheme for the dark theme.
 - [ ] Other: Complete the localization translation map.
 - [ ] Fix: Changing language or theme closes the currently open page.
+- [ ] Fix: Closing a tab for the 'profile' page specifically opens the page.
 - [ ] Feature: Lock the sidebar links according to access level.
   - L1: Shipping and References Page.
   - L2: L1 + Reports Page.

@@ -1,10 +1,14 @@
-import React, { useState } from 'react'
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import React, { useState, useContext, useEffect } from 'react'
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { remote } from 'electron'
 import styled from 'styled-components'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
+import { Settings } from './Context'
 import toDashCase from '../utils/ToDashCase'
 
 import Header from './Header'
@@ -12,20 +16,33 @@ import Sidebar from './Sidebar'
 
 import Welcome from '../pages/Welcome'
 import Dashboard from '../pages/Dashboard'
+import Profile from '../pages/Profile'
 import Staff from '../pages/Staff'
 
 const HEADER_HEIGHT = 50
-const SIDEBAR_WIDTH = 240
+const SIDEBAR_WIDTH = 250
 const TABSPACE_HEIGHT = 40
+const TAB_WIDTH = 200
 const TITLE_HEIGHT = 50
 
 const Layout = (): JSX.Element => {
+  const { localize } = useContext(Settings)!
+  
   const [tabs, setTabs] = useState<Array<string>>([])
   const [view, setView] = useState<string | null>(null)
 
+  const [maxTabs, setMaxTabs] = useState<number>(5)
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      const currentWidth = remote.getCurrentWindow().getBounds().width
+      const tabSpaceWidth = currentWidth - SIDEBAR_WIDTH
+      setMaxTabs(Math.floor(tabSpaceWidth / TAB_WIDTH))
+    })
+  }, [])
+
   function updateTabs (linkPressed: string) {
     if (!tabs.includes(linkPressed)) {
-      if (tabs.length >= 5) setTabs([...tabs.slice(1), linkPressed])
+      if (tabs.length >= maxTabs) setTabs([...tabs.slice(1), linkPressed])
       else setTabs([...tabs, linkPressed])
     }
     setView(linkPressed)
@@ -37,7 +54,7 @@ const Layout = (): JSX.Element => {
         {tabs.map(tab =>
           <Tab key={tab} selected={tab === view}
             to={'/' + toDashCase(tab)} onClick={() => setView(tab)}>
-            {tab}
+            {localize(tab)}
             <FontAwesomeIcon icon={faTimes}
               onClick={e => {
                 e.stopPropagation()
@@ -49,7 +66,7 @@ const Layout = (): JSX.Element => {
               }} />
           </Tab>
         )}
-        <TabTip>{tabs.length}/5</TabTip>
+        <TabTip>{tabs.length}/{maxTabs}</TabTip>
       </StyledTabSpace>
     )
   }
@@ -62,12 +79,13 @@ const Layout = (): JSX.Element => {
         <Sidebar updateTab={updateTabs} />
         <Body>
           <TabSpace />
-          <TitleSpace>{view}</TitleSpace>
+          <TitleSpace>{localize(view)}</TitleSpace>
           <Content>
             <Switch>
               <Route path="/" exact component={ Welcome } />
               <Route path="/dashboard" component={ Dashboard } />
               <Route path="/staff" component={ Staff } />
+              <Route path="/profile" component={ Profile } />
             </Switch>
           </Content>
         </Body>
@@ -122,7 +140,7 @@ const TabTip = styled.div`
 const Tab = styled(Link)<TabProps>`
   background-color: ${({ theme, selected }) => selected ? theme.bg : theme.bgDilute};
   color: ${({ theme, selected }) => selected ? theme.fgStrong : theme.fgMid};
-  width: 150px;
+  width: ${TAB_WIDTH}px;
   padding: ${({ selected }) => selected ? 8 : 6}px 10px;
   font-size: 11px;
   text-decoration: none;
@@ -148,6 +166,7 @@ const Tab = styled(Link)<TabProps>`
 
 const TitleSpace = styled.div`
   background-color: ${({ theme }) => theme.bg};
+  color: ${({ theme }) => theme.fgStrong};
   border-top: 1px solid ${({ theme }) => theme.fgWeak};
   border-bottom: 1px solid ${({ theme }) => theme.fgWeak};
   padding-left: 20px;

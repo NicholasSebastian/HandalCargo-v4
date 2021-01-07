@@ -33,7 +33,7 @@
     },
     "gNow": {
         "en": "It is now",
-        "id": "Sekarang"
+        "id": "Pukul"
     },
     "shipping": {
         "en": "Shipping",
@@ -65,11 +65,11 @@
     },
     "containerGroups": {
         "en": "Container Groups",
-        "id": ""
+        "id": "Kelompok Kontainer"
     },
     "carriers": {
-        "en": "Carriers",
-        "id": ""
+        "en": "Shippers",
+        "id": "Pengirim Barang"
     },
     "routes": {
         "en": "Routes",
@@ -81,7 +81,7 @@
     },
     "planes": {
         "en": "Planes",
-        "id": ""
+        "id": "Pesawat"
     },
     "currencies": {
         "en": "Currencies",
@@ -89,7 +89,7 @@
     },
     "productDetails": {
         "en": "Product Details",
-        "id": ""
+        "id": "Keterangan Barang"
     },
     "expeditions": {
         "en": "Expeditions",
@@ -109,7 +109,7 @@
     },
     "master": {
         "en": "Master",
-        "id": ""
+        "id": "Master"
     },
     "staff": {
         "en": "Staff",
@@ -117,7 +117,7 @@
     },
     "staffGroups": {
         "en": "Staff Groups",
-        "id": ""
+        "id": "Kelompok Staf"
     },
     "accessLevels": {
         "en": "Access Levels",
@@ -125,7 +125,7 @@
     },
     "companySetup": {
         "en": "Company Setup",
-        "id": ""
+        "id": "Pengaturan Perusahaan"
     },
     "settings": {
         "en": "Settings",
@@ -133,15 +133,19 @@
     },
     "databaseSetup": {
         "en": "Database Setup",
-        "id": ""
+        "id": "Pengaturan Database"
     },
     "backupRestore": {
         "en": "Backup and Restore",
-        "id": ""
+        "id": "Pecadangan dan Pemulihan"
+    },
+    "viewProfile": {
+        "en": "View Profile",
+        "id": "Lihat Profil"
     },
     "theme": {
         "en": "Theme",
-        "id": ""
+        "id": "Tema"
     },
     "language": {
         "en": "Language",
@@ -149,6 +153,66 @@
     },
     "logoutExit": {
         "en": "Logout and Exit",
-        "id": ""
+        "id": "Logout dan Keluar"
+    },
+    "staffId": {
+        "en": "Staff ID",
+        "id": "Nomor Identitas"
+    },
+    "fullName": {
+        "en": "Full Name",
+        "id": "Nama Lengkap"
+    },
+    "staffGroup": {
+        "en": "Job Group",
+        "id": "Posisi Perkerjaan"
+    },
+    "address": {
+        "en": "Address",
+        "id": "Alamat"
+    },
+    "district": {
+        "en": "District",
+        "id": "Distrik"
+    },
+    "city": {
+        "en": "City",
+        "id": "Kota"
+    },
+    "phoneNumber": {
+        "en": "Phone Number",
+        "id": "Nomor Telepon"
+    },
+    "gender": {
+        "en": "Gender",
+        "id": "Jenis Kelamin"
+    },
+    "birthplace": {
+        "en": "Place of Birth",
+        "id": "Tempat Lahir"
+    },
+    "birthday": {
+        "en": "Date of Birth",
+        "id": "Tanggal Lahir"
+    },
+    "overtime": {
+        "en": "Overtime Pay",
+        "id": "Lembur"
+    },
+    "salary": {
+        "en": "Salary",
+        "id": "Gaji"
+    },
+    "allowance": {
+        "en": "Meal Allowance",
+        "id": "Uang Makan"
+    },
+    "diligenceBonus": {
+        "en": "Diligence Bonus",
+        "id": "Uang Kerajinan"
+    },
+    "employmentDate": {
+        "en": "Date of Employment",
+        "id": "Tanggal Pertama Kerja"
     }
 }

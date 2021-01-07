@@ -18,36 +18,33 @@ const ProfileButton = ({ updateTab }: HeaderProps): JSX.Element => {
   const photo = useRef(profilepic)
 
   return (
-    <StyledProfile to='/profile' onClick={() => updateTab('Profile')}>
+    <StyledProfile>
       <div>
         <div>{username.current}</div>
         <div>{staffGroup.current}</div>
       </div>
       <div><img src={photo.current || NoPhoto} /></div>
       <FontAwesomeIcon icon={faAngleDown} />
-      <ProfileDropDown />
+      <ProfileDropDown updateTab={updateTab} />
     </StyledProfile>
   )
 }
 
-const ProfileDropDown = (): JSX.Element => {
+const ProfileDropDown = ({ updateTab }: HeaderProps): JSX.Element => {
   const { lang, theme, setLang, setTheme, localize } = useContext(Settings)!
   return (
-    <StyledDropdown onClick={e => e.stopPropagation()}>
-      <button onClick={() => {
-        setTheme(theme === 'Light' ? 'Dark' : 'Light')
-      }}>
+    <StyledDropdown>
+      <Link to='/profile' onClick={() => updateTab('Profile')}>
+        {localize('viewProfile')}
+      </Link>
+      <button onClick={() => setTheme(theme === 'Light' ? 'Dark' : 'Light')}>
         {localize('theme')}: {theme}
       </button>
-      <button onClick={() => {
-        setLang(lang === 'en' ? 'id' : 'en')
-      }}>
+      <button onClick={() => setLang(lang === 'en' ? 'id' : 'en')}>
         {localize('language')}: {lang.toUpperCase()}
       </button>
       <hr/>
-      <button onClick={() => {
-        ipcRenderer.send('logout')
-      }}>
+      <button onClick={() => ipcRenderer.send('logout')}>
         {localize('logoutExit')}
       </button>
     </StyledDropdown>
@@ -75,6 +72,7 @@ const StyledHeader = styled.div`
 `
 
 const HeaderButton = styled.button`
+  background: none;
   border: none;
   margin-top: 2px;
   margin-right: 2px;
@@ -90,7 +88,8 @@ const HeaderButton = styled.button`
   }
 `
 
-const StyledProfile = styled(Link)`
+const StyledProfile = styled.button`
+  background: none;
   height: 100%;
   border: none;
   display: flex;
@@ -134,7 +133,6 @@ const StyledProfile = styled(Link)`
   }
 
   &:hover {
-    cursor: pointer;
     background-color: ${({ theme }) => theme.fgWeak};
 
     > section {
@@ -156,12 +154,16 @@ const StyledDropdown = styled.section`
   right: 0;
   z-index: 1;
 
-  > button {
+  > button, a {
+    background: none;
+    color: ${({ theme }) => theme.fgStrong};
+    display: block;
     width: 100%;
     border: none;
     border-radius: 5px;
     padding: 7px 0;
     font-size: 12px;
+    text-decoration: none;
 
     &:hover {
       cursor: pointer;

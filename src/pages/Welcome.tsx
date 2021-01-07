@@ -47,7 +47,7 @@ const StyledWelcome = styled.div`
 
   > div {
     color: ${({ theme }) => theme.fgStrong};
-    margin-bottom: 5px;
+    margin: 5px 0;
 
     &:first-child {
       font-size: 32px;

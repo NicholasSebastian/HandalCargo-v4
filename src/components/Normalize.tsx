@@ -20,13 +20,14 @@ const GlobalStyles = createGlobalStyle`
   }
 
   input, button {
+    color: ${({ theme }) => theme.fgStrong};
     &:focus {
       outline: none;
     }
   }
 
   body {
-    background: ${({ theme }) => theme.bg};
+    background-color: ${({ theme }) => theme.bg};
     margin: 0;
     padding: 0;
   }
