@@ -10,7 +10,6 @@ const GlobalStyles = createGlobalStyle`
   * {
     font-family: 'Montserrat';
     box-sizing: border-box;
-    user-select: none;
   }
 
   img, a {

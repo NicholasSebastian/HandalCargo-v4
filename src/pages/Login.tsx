@@ -6,7 +6,6 @@ import { Settings } from '../components/Context'
 
 import Layout from '../components/Layout'
 import Loading from '../components/Loading'
-import Button from '../components/Button'
 
 import LoginArt from '../assets/images/login_art.jpg'
 
@@ -118,5 +117,20 @@ const StyledLogin = styled.div`
       text-align: center;
       font-size: 11px;
     }
+  }
+`
+
+const Button = styled.button`
+  background-color: ${({ theme }) => theme.bg};
+  color: ${({ theme }) => theme.accent};
+  border: 1px solid ${({ theme }) => theme.accent};
+  padding: 10px 20px;
+  font-size: 14px;
+  transition: all 0.2s;
+
+  &:hover {
+    cursor: pointer;
+    background-color: ${({ theme }) => theme.accent};
+    color: ${({ theme }) => theme.bg};
   }
 `

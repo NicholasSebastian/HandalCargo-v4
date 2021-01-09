@@ -6,8 +6,8 @@ import mariadb from 'mariadb'
 import '@babel/polyfill'
 
 import { windowInstance } from './main'
-import connectionSettings from './Connection.json'
 
+import connectionSettings from './Connection.json'
 const DB_PING_INTERVAL = 60000
 
 class Connection {

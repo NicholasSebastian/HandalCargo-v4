@@ -31,14 +31,17 @@ const Layout = (): JSX.Element => {
   const [tabs, setTabs] = useState<Array<string>>([])
   const [view, setView] = useState<string | null>(null)
 
-  const [maxTabs, setMaxTabs] = useState<number>(5)
+  const [maxTabs, setMaxTabs] = useState<number>(4)
   useEffect(() => {
     window.addEventListener('resize', () => {
       const currentWidth = remote.getCurrentWindow().getBounds().width
-      const tabSpaceWidth = currentWidth - SIDEBAR_WIDTH
+      const tabSpaceWidth = currentWidth - SIDEBAR_WIDTH - 50 // offset
       setMaxTabs(Math.floor(tabSpaceWidth / TAB_WIDTH))
     })
   }, [])
+  useEffect(() => {
+    if (tabs.length > maxTabs) setTabs(tabs.slice(1))
+  }, [maxTabs])
 
   function updateTabs (linkPressed: string) {
     if (!tabs.includes(linkPressed)) {
@@ -114,7 +117,8 @@ const Title = styled.h1`
 `
 
 const Body = styled.section`
-  box-shadow: 5px 5px 8px ${({ theme }) => theme.fgWeak} inset;
+  border-top: 1px solid ${({ theme }) => theme.fgWeak};
+  border-left: 1px solid ${({ theme }) => theme.fgWeak};
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: ${TABSPACE_HEIGHT}px ${TITLE_HEIGHT}px 1fr;
@@ -146,9 +150,9 @@ const Tab = styled(Link)<TabProps>`
   text-decoration: none;
   position: relative;
 
-  border-top: 1px solid ${({ theme }) => theme.fgMid};
-  border-left: 1px solid ${({ theme }) => theme.fgMid};
-  border-right: 1px solid ${({ theme }) => theme.fgMid};
+  border-top: 1px solid ${({ theme }) => theme.fgWeak};
+  border-left: 1px solid ${({ theme }) => theme.fgWeak};
+  border-right: 1px solid ${({ theme }) => theme.fgWeak};
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 
@@ -173,13 +177,11 @@ const TitleSpace = styled.div`
   display: flex;
   align-items: center;
   font-size: 18px;
-  z-index: -1;
 `
 
 const Content = styled.section`
   background-color: ${({ theme }) => theme.bgDilute};
   overflow: scroll;
-  z-index: -1;
 `
 
 interface TabProps {

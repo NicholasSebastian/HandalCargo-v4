@@ -88,7 +88,7 @@ const HeaderButton = styled.button`
   }
 `
 
-const StyledProfile = styled.button`
+const StyledProfile = styled.div`
   background: none;
   height: 100%;
   border: none;
@@ -163,6 +163,7 @@ const StyledDropdown = styled.section`
     border-radius: 5px;
     padding: 7px 0;
     font-size: 12px;
+    text-align: center;
     text-decoration: none;
 
     &:hover {
