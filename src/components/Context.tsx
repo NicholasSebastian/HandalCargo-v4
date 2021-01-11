@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { useState, useEffect, createContext } from 'react'
+import React, { useState, useEffect, createContext, memo } from 'react'
 import { DefaultTheme, ThemeProvider } from 'styled-components'
 
 import themes from '../Themes.json'
@@ -29,7 +29,7 @@ const Context = ({ children }: ContextProps): JSX.Element => {
   )
 }
 
-export default Context
+export default memo(Context)
 
 type ThemeType = 'Light' | 'Dark'
 type LangType = 'en' | 'id'

@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, createContext, memo } from 'react'
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import { remote } from 'electron'
 import styled from 'styled-components'
@@ -24,6 +25,8 @@ const SIDEBAR_WIDTH = 250
 const TABSPACE_HEIGHT = 40
 const TAB_WIDTH = 200
 const TITLE_HEIGHT = 50
+
+export const TabControl = createContext<Function | null>(null)
 
 const Layout = (): JSX.Element => {
   const { localize } = useContext(Settings)!
@@ -78,8 +81,10 @@ const Layout = (): JSX.Element => {
     <Router>
       <StyledLayout>
         <Title>Handal Cargo</Title>
-        <Header updateTab={updateTabs} />
-        <Sidebar updateTab={updateTabs} />
+        <TabControl.Provider value={updateTabs}>
+          <Header />
+          <Sidebar />
+        </TabControl.Provider>
         <Body>
           <TabSpace />
           <TitleSpace>{localize(view)}</TitleSpace>
@@ -97,7 +102,7 @@ const Layout = (): JSX.Element => {
   )
 }
 
-export default Layout
+export default memo(Layout)
 
 const StyledLayout = styled.div`
   display: grid;
@@ -129,7 +134,7 @@ const StyledTabSpace = styled.div`
   display: flex;
   align-items: flex-end;
   padding-left: 20px;
-  overflow-x: scroll;
+  overflow-x: hidden;
   position: relative;
 `
 
@@ -181,7 +186,7 @@ const TitleSpace = styled.div`
 
 const Content = styled.section`
   background-color: ${({ theme }) => theme.bgDilute};
-  overflow: scroll;
+  overflow: hidden;
 `
 
 interface TabProps {

@@ -20,10 +20,18 @@ class Window {
       icon: '../src/assets/images/icon.png',
       webPreferences: {
         nodeIntegration: true
-      }
+      },
+      show: false
     })
     this.loadContent()
-    this.window.on('closed', () => {
+    this.window.removeMenu()
+    this.window.once('ready-to-show', () => {
+      this.window?.show()
+      if (process.env.NODE_ENV === 'development') {
+        this.window?.webContents.openDevTools()
+      }
+    })
+    this.window.once('closed', () => {
       connectionInstance.connection?.end()
       this.window = null
     })

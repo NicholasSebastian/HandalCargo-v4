@@ -34,6 +34,7 @@
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.6",
     "@types/react-router-dom": "^5.1.7",
+    "@types/sjcl": "^1.0.29",
     "@types/styled-components": "^5.1.0",
     "@typescript-eslint/eslint-plugin": "^3.4.0",
     "@typescript-eslint/parser": "^3.4.0",
@@ -80,9 +81,14 @@
     "styled-components": "^5.2.1"
   },
   "build": {
-    "appId": "your.id",
-    "mac": {
-      "category": "public.app-category.video"
+    "appId": "com.handalcargo.erp",
+    "productName": "Handal Cargo ERP",
+    "buildVersion": "1.0",
+    "copyright": "Copyright © 2021 Handal Cargo",
+    "win": {
+      "target": "nsis",
+      "icon": "icon.png",
+      "legalTrademarks": "Handal Cargo"
     },
     "directories": {
       "output": "packages"

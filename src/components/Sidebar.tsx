@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { useContext, useState } from 'react'
+import React, { memo, useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBoxOpen, faThLarge, faCopy, faUser, faCog, IconDefinition } from '@fortawesome/free-solid-svg-icons'
 
-import { Settings } from '../components/Context'
+import { Settings } from './Context'
+import { TabControl } from './Layout'
 import toDashCase from '../utils/ToDashCase'
 
 const elements: Array<SidebarElement> = [
@@ -48,8 +49,9 @@ const elements: Array<SidebarElement> = [
   }
 ]
 
-const Sidebar = ({ updateTab }: SidebarProps): JSX.Element => {
+const Sidebar = (): JSX.Element => {
   const { localize } = useContext(Settings)!
+  const updateTab = useContext(TabControl)!
   const [selected, setSelected] = useState<number | null>(null)
 
   return (
@@ -75,7 +77,7 @@ const Sidebar = ({ updateTab }: SidebarProps): JSX.Element => {
   )
 }
 
-export default Sidebar
+export default memo(Sidebar)
 
 const StyledSidebar = styled.div`
   background-color: ${({ theme }) => theme.bg};
@@ -125,10 +127,6 @@ interface SidebarElement {
   buttonIcon: IconDefinition,
   buttonName: string,
   subButtonNames: Array<string>
-}
-
-interface SidebarProps {
-  updateTab: Function
 }
 
 interface ButtonProps {

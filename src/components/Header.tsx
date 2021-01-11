@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { useRef, useContext } from 'react'
+import React, { memo, useRef, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { ipcRenderer } from 'electron'
@@ -9,9 +9,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faCalculator, faStickyNote, faAngleDown } from '@fortawesome/free-solid-svg-icons'
 
 import { Settings } from './Context'
+import { TabControl } from './Layout'
 import NoPhoto from '../assets/images/no-photo.png'
 
-const ProfileButton = ({ updateTab }: HeaderProps): JSX.Element => {
+const ProfileButton = (): JSX.Element => {
   const { staffid, groupname, profilepic } = JSON.parse(window.sessionStorage.getItem('Profile')!)
   const username = useRef(staffid)
   const staffGroup = useRef(groupname)
@@ -25,13 +26,14 @@ const ProfileButton = ({ updateTab }: HeaderProps): JSX.Element => {
       </div>
       <div><img src={photo.current || NoPhoto} /></div>
       <FontAwesomeIcon icon={faAngleDown} />
-      <ProfileDropDown updateTab={updateTab} />
+      <ProfileDropDown />
     </StyledProfile>
   )
 }
 
-const ProfileDropDown = ({ updateTab }: HeaderProps): JSX.Element => {
+const ProfileDropDown = (): JSX.Element => {
   const { lang, theme, setLang, setTheme, localize } = useContext(Settings)!
+  const updateTab = useContext(TabControl)!
   return (
     <StyledDropdown>
       <Link to='/profile' onClick={() => updateTab('Profile')}>
@@ -51,18 +53,18 @@ const ProfileDropDown = ({ updateTab }: HeaderProps): JSX.Element => {
   )
 }
 
-const Header = ({ updateTab }: HeaderProps): JSX.Element => {
+const Header = (): JSX.Element => {
   return (
     <StyledHeader>
       <HeaderButton><FontAwesomeIcon icon={faEnvelope} /></HeaderButton>
       <HeaderButton><FontAwesomeIcon icon={faCalculator} /></HeaderButton>
       <HeaderButton><FontAwesomeIcon icon={faStickyNote} /></HeaderButton>
-      <ProfileButton updateTab={updateTab} />
+      <ProfileButton />
     </StyledHeader>
   )
 }
 
-export default Header
+export default memo(Header)
 
 const StyledHeader = styled.div`
   background-color: ${({ theme }) => theme.bg};
@@ -172,7 +174,3 @@ const StyledDropdown = styled.section`
     }
   }
 `
-
-interface HeaderProps {
-  updateTab: Function
-}

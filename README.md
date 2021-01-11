@@ -8,6 +8,7 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
 - [ ] Fix: Find a better way to keep the connection alive.
 - [x] Feature: Login Screen and Functionality.
 - [ ] Feature: Encryption for passwords.
+- [ ] Fix: According to [this link](https://stackoverflow.com/questions/47875097/add-element-to-a-state-react), JSX should not be stored in nor rendered from state. Hence, the Login page should be rewritten with respect to good practice.
 - [x] Feature: Layout for the main application window.
   - Header with Profile Button and Dropdown, etc.
   - Sidebar with navigation links.
@@ -15,7 +16,7 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
 - [x] Other: Add the color scheme for the dark theme.
 - [ ] Other: Complete the localization translation map.
 - [ ] Fix: Changing language or theme closes the currently open page.
-- [ ] Fix: Closing a tab for the 'profile' page specifically opens the page.
+- [ ] Fix: Closing a tab also routes to the page.
 - [ ] Feature: Lock the sidebar links according to access level.
   - L1: Shipping and References Page.
   - L2: L1 + Reports Page.
@@ -29,6 +30,7 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
 - [ ] Content: All the pages.
   - UI tables for each table in the database.
   - Add, modify, delete functionality.
+  - Form Validation.
   - Search and filter functionality.
 - [ ] Content: Dashboard
 - [ ] Content: Payroll???
@@ -41,6 +43,8 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
 - [ ] Other: Change the image on the login page.
 - [ ] Feature: Write/read data to/from a JSON file for local database connection settings.
 - [ ] Other: Figure out a way to backup/restore database outside of cPanel.
-- [ ] Fix: Change some components to PureComponents or useMemo to minimize dumb re-renders.
+- [ ] Other: Optimization - Change some components to PureComponents or React.memo to minimize dumb re-renders.
+- [ ] Other: Display the loading animation when awaiting for async query/load functions to return data.
+- [ ] Other: Application icon.
 
 Note: List is still incomplete.

@@ -99,7 +99,7 @@ class Connection {
       } else {
         dialog.showMessageBoxSync({
           message: 'Fatal Error occured',
-          detail: error.message
+          detail: `${error.code}: ${error.message}`
         })
       }
     } else {

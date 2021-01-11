@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, memo } from 'react'
 import styled from 'styled-components'
 import { ipcRenderer } from 'electron'
 import { Settings } from '../components/Context'
@@ -8,6 +8,9 @@ import Layout from '../components/Layout'
 import Loading from '../components/Loading'
 
 import LoginArt from '../assets/images/login_art.jpg'
+
+// TODO: State should not hold react components. Rewrite login page.
+//       https://stackoverflow.com/questions/47875097/add-element-to-a-state-react
 
 const Login = (): JSX.Element => {
   const { localize } = useContext(Settings)!
@@ -38,10 +41,10 @@ const Login = (): JSX.Element => {
     )
   }
 
-  const [view, setView] = useState<JSX.Element>(<Loading/>)
+  const [view, setView] = useState<JSX.Element>(<Loading />)
 
   useEffect(() => {
-    ipcRenderer.once('connected', () => setView(<Auth />))
+    ipcRenderer.once('connected', () => setView(window.sessionStorage.getItem('Profile') ? <Layout/> : <Auth />))
     ipcRenderer.send('connect')
 
     ipcRenderer.once('login-success', (event, profileInfo) => {
@@ -56,7 +59,7 @@ const Login = (): JSX.Element => {
   return view
 }
 
-export default Login
+export default memo(Login)
 
 const StyledLogin = styled.div`
   width: 100%;
