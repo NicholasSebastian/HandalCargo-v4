@@ -26,13 +26,11 @@ const Row = ({ row }: RowProps): JSX.Element => {
   )
 }
 
-// TODO: this unfinished hot mess.
-
 const Form = ({ formData, setFormData }: FormFragmentProps): JSX.Element => {
   const [staffGroup, setStaffGroup] = useState<Array<StaffGroup> | null>(null)
   useEffect(() => {
+    ipcRenderer.once('staffFormQuery', (event, data) => { setStaffGroup(data) })
     ipcRenderer.send('query', 'SELECT `stfgrcode`, `groupname` FROM `staffgroup`', [], 'staffFormQuery')
-    ipcRenderer.on('staffFormQuery', (event, data) => { setStaffGroup(data) })
   }, [])
 
   return (
@@ -44,7 +42,7 @@ const Form = ({ formData, setFormData }: FormFragmentProps): JSX.Element => {
 const Staff = (): JSX.Element => {
   return (
     <Template
-      tableName='staff'
+      id='staff'
       primaryKey='staffid'
       searchBy='staffname'
       columnNames={['Staff ID', 'Full Name', 'Job', 'Phone Number', 'Status']}
@@ -57,8 +55,7 @@ const Staff = (): JSX.Element => {
       formQuery={'\
         SELECT `profilepic`, `staffid`, `staffname`, `pwd`, `level`, `groupcode`, \
           `address1`, `district`, `city`, `phonenum`, `gender`, `placeofbirth`, `dateofbirth`, \
-          `ot/hr`, `salary`, `foodallowance`, `bonus`, `dilligencebonus`, \
-          `status`, `dateofemployment` \
+          `ot/hr`, `salary`, `foodallowance`, `bonus`, `dilligencebonus`, `status`, `dateofemployment` \
         FROM `staff` \
         WHERE `staffid` = ?'
       }

@@ -1,5 +1,6 @@
 /* eslint-disable padded-blocks */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import React, { useState, useEffect, useRef } from 'react'
 import { ipcRenderer, remote } from 'electron'
 import styled from 'styled-components'
@@ -13,26 +14,17 @@ const HEADPANEL_HEIGHT = 30
 const SIDEPANEL_WIDTH = 200
 
 const Table = ({
-  tableName, columnNames, RowFragment, primaryKey, searchBy,
+  id, columnNames, RowFragment, primaryKey, searchBy,
   tableQuery, deleteQuery, toAddPage, toViewPage, toEditPage
 }: TableProps): JSX.Element => {
-
-  // NOTE: I feel that this component can still be written in a better way than this.
 
   const [data, setData] = useState<Array<never>>()
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    ipcRenderer.once(`${tableName}TableQuery`, (event, data) => {
-      setData(data)
-      console.log('refreshed') // REMOVE THIS; for debugging purposes only.
-    })
-    refreshTable()
+    ipcRenderer.once(id, (event, data) => setData(data))
+    ipcRenderer.send('query', tableQuery, [], id)
   }, [])
-
-  function refreshTable () {
-    ipcRenderer.send('query', tableQuery, [], `${tableName}TableQuery`)
-  }
 
   function handleDelete (primaryKey: string) {
     dialog.showMessageBox({
@@ -43,7 +35,7 @@ const Table = ({
       .then(({ response }) => {
         if (response === 0) {
           ipcRenderer.send('query', deleteQuery, [primaryKey])
-          refreshTable()
+          ipcRenderer.send('query', tableQuery, [], id)
         }
       })
   }
@@ -69,8 +61,14 @@ const Table = ({
                   <button>
                     <FontAwesomeIcon icon={faEllipsisH} />
                     <div>
-                      <button onClick={() => toEditPage(row[primaryKey])}>Edit</button>
-                      <button onClick={() => handleDelete(row[primaryKey])}>Delete</button>
+                      <button onClick={e => {
+                        e.stopPropagation()
+                        toEditPage(row[primaryKey])
+                      }}>Edit</button>
+                      <button onClick={e => {
+                        e.stopPropagation()
+                        handleDelete(row[primaryKey])
+                      }}>Delete</button>
                     </div>
                   </button>
                 </tr>
@@ -110,16 +108,15 @@ const Form = ({ FormFragment, returnFunction, initialData, queryOnClick }: FormP
 }
 
 const Template = ({
-  tableName, columnNames,
+  id, columnNames,
   tableQuery, formQuery, insertQuery, updateQuery, deleteQuery,
   RowComponent, FormComponent, primaryKey, searchBy
 }: TemplateProps): JSX.Element => {
 
   const [mode, setMode] = useState<Mode>('Table')
-  const selected = useRef<string | null>(null)
+  const selected = useRef<string>()
 
-  // TODO: fix error when fetching initialData. query returns empty array for some reason.
-  // TODO: move selected ref into Form component and have it passed as a parameter back on the queryOnClick callback.
+  // TODO: use a higher order component (HOC) design pattern instead.
 
   return (() => {
     switch (mode) {
@@ -135,14 +132,14 @@ const Template = ({
           <Form
             FormFragment={FormComponent}
             returnFunction={() => setMode('Table')}
-            initialData={Object.values(ipcRenderer.sendSync('querySync', formQuery, [selected])[0])} />
+            initialData={Object.values(ipcRenderer.sendSync('querySync', formQuery, [selected.current])[0])} />
         )
       case 'Edit':
         return (
           <Form
             FormFragment={FormComponent}
             returnFunction={() => setMode('Table')}
-            initialData={Object.values(ipcRenderer.sendSync('querySync', formQuery, [selected])[0])}
+            initialData={Object.values(ipcRenderer.sendSync('querySync', formQuery, [selected.current])[0])}
             queryOnClick={formData => {
               dialog.showMessageBox({
                 title: 'Update Record',
@@ -151,7 +148,7 @@ const Template = ({
               })
                 .then(({ response }) => {
                   if (response === 0) {
-                    ipcRenderer.send('query', updateQuery, [...formData, selected])
+                    ipcRenderer.send('query', updateQuery, [...formData, selected.current])
                   }
                 })
             }} />
@@ -159,7 +156,7 @@ const Template = ({
       default:
         return (
           <Table
-            tableName={tableName}
+            id={id}
             columnNames={columnNames}
             tableQuery={tableQuery}
             RowFragment={RowComponent}
@@ -339,13 +336,28 @@ const StyledFormArea = styled.div<{ editable: boolean }>`
     input { 
       pointer-events: ${({ editable }) => editable ? 'auto' : 'none'}; 
     }
+
+    > button {
+      background-color: ${({ theme }) => theme.accent};
+      color: ${({ theme }) => theme.bg};
+      border: none;
+      border-radius: 5px;
+      width: 70px;
+      padding: 10px 0;
+      margin-right: 10px;
+
+      &:hover {
+        cursor: pointer;
+        // add hover effects here
+      }
+    }
   }
 `
 
 type Mode = 'Table' | 'Add' | 'View' | 'Edit'
 
 interface TemplateProps {
-  tableName: string
+  id: string
   columnNames: Array<string>
   tableQuery: string
   formQuery: string
@@ -359,7 +371,7 @@ interface TemplateProps {
 }
 
 interface TableProps {
-  tableName: string,
+  id: string,
   columnNames: Array<string>
   tableQuery: string
   RowFragment: React.FunctionComponent<{ row: never }>

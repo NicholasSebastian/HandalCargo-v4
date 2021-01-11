@@ -9,8 +9,8 @@ import Loading from '../components/Loading'
 
 import LoginArt from '../assets/images/login_art.jpg'
 
-// TODO: State should not hold react components. Rewrite login page.
-//       https://stackoverflow.com/questions/47875097/add-element-to-a-state-react
+// TODO: State should not hold react components. Rewrite this component.
+// https://stackoverflow.com/questions/47875097/add-element-to-a-state-react
 
 const Login = (): JSX.Element => {
   const { localize } = useContext(Settings)!
