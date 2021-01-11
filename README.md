@@ -44,7 +44,7 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
 - [ ] Feature: Write/read data to/from a JSON file for local database connection settings.
 - [ ] Other: Figure out a way to backup/restore database outside of cPanel.
 - [ ] Other: Optimization - Change some components to PureComponents or React.memo to minimize dumb re-renders.
-- [ ] Other: Display the loading animation when awaiting for async query/load functions to return data.
+- [x] Other: Display the loading animation in between route changes.
 - [ ] Other: Application icon.
 
 Note: List is still incomplete.

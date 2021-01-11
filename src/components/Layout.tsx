@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { useState, useContext, useEffect, createContext, memo } from 'react'
+import React, { useState, useContext, useEffect, createContext, memo, lazy, Suspense } from 'react'
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import { remote } from 'electron'
 import styled from 'styled-components'
@@ -14,11 +14,12 @@ import toDashCase from '../utils/ToDashCase'
 
 import Header from './Header'
 import Sidebar from './Sidebar'
+import Loading from './Loading'
 
-import Welcome from '../pages/Welcome'
-import Dashboard from '../pages/Dashboard'
-import Profile from '../pages/Profile'
-import Staff from '../pages/Staff'
+const Welcome = lazy(() => import('../pages/Welcome'))
+const Dashboard = lazy(() => import('../pages/Dashboard'))
+const Profile = lazy(() => import('../pages/Profile'))
+const Staff = lazy(() => import('../pages/Staff'))
 
 const HEADER_HEIGHT = 50
 const SIDEBAR_WIDTH = 250
@@ -43,7 +44,7 @@ const Layout = (): JSX.Element => {
     })
   }, [])
   useEffect(() => {
-    if (tabs.length > maxTabs) setTabs(tabs.slice(1))
+    if (tabs.length > maxTabs) setTabs(tabs.slice(tabs.length - maxTabs))
   }, [maxTabs])
 
   function updateTabs (linkPressed: string) {
@@ -89,12 +90,14 @@ const Layout = (): JSX.Element => {
           <TabSpace />
           <TitleSpace>{localize(view)}</TitleSpace>
           <Content>
-            <Switch>
-              <Route path="/" exact component={ Welcome } />
-              <Route path="/dashboard" component={ Dashboard } />
-              <Route path="/staff" component={ Staff } />
-              <Route path="/profile" component={ Profile } />
-            </Switch>
+            <Suspense fallback={<Loading />}>
+              <Switch>
+                <Route path="/" exact component={ Welcome } />
+                <Route path="/dashboard" component={ Dashboard } />
+                <Route path="/staff" component={ Staff } />
+                <Route path="/profile" component={ Profile } />
+              </Switch>
+            </Suspense>
           </Content>
         </Body>
       </StyledLayout>
