@@ -8,7 +8,7 @@ import '@babel/polyfill'
 import { windowInstance } from './main'
 
 import connectionSettings from './Connection.json'
-const DB_PING_INTERVAL = 60000
+// const DB_PING_INTERVAL = 60000
 
 class Connection {
   connection: mariadb.Connection | undefined
@@ -18,7 +18,7 @@ class Connection {
       .then(connection => {
         this.connection = connection
         this.connection.on('error', Connection.handleConnectionError)
-        this.createConnectionHeartbeat()
+        // this.createConnectionHeartbeat()
         event.reply('connected')
       })
       .catch(Connection.handleConnectionError)
@@ -81,13 +81,13 @@ class Connection {
       .catch(Connection.handleConnectionError)
   }
 
-  private createConnectionHeartbeat () {
-    setInterval(() => {
-      console.log('Pinging the database server.')
-      this.connection?.ping()
-        .catch(Connection.handleConnectionError)
-    }, DB_PING_INTERVAL)
-  }
+  // private createConnectionHeartbeat () {
+  //   setInterval(() => {
+  //     console.log('Pinging the database server.')
+  //     this.connection?.ping()
+  //       .catch(Connection.handleConnectionError)
+  //   }, DB_PING_INTERVAL)
+  // }
 
   private static handleConnectionError (error?: mariadb.SqlError) {
     if (error) {

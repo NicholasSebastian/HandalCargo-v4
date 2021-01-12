@@ -8,7 +8,9 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
-import Template, { FormFragmentProps } from '../components/ComplexTemplate'
+import Template from '../components/ComplexTemplate'
+import { FilterFragmentProps } from '../components/ComplexTable'
+import { FormFragmentProps } from '../components/Form'
 
 const Row = ({ row }: RowProps): JSX.Element => {
   return (
@@ -22,6 +24,21 @@ const Row = ({ row }: RowProps): JSX.Element => {
           ? <><GreenIcon icon={faCheckCircle} /> Active</>
           : <><RedIcon icon={faTimesCircle} /> Inactive</>
       }</td>
+    </Fragment>
+  )
+}
+
+// TODO: this hot mess
+
+const Filter = ({ setFilter }: FilterFragmentProps): JSX.Element => {
+  useEffect(() => setFilter(() =>
+    (data: Array<never>) => {
+      return data
+    }
+  ), [])
+
+  return (
+    <Fragment>
     </Fragment>
   )
 }
@@ -73,7 +90,8 @@ const Staff = (): JSX.Element => {
         WHERE `staffid` = ?'
       }
       RowComponent={Row}
-      FormComponent={Form} />
+      FormComponent={Form}
+      FilterComponent={Filter} />
   )
 }
 

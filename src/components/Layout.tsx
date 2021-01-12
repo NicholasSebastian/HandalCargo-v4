@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import React, { useState, useContext, useEffect, createContext, memo, lazy, Suspense } from 'react'
-import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { HashRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom'
 import { remote } from 'electron'
 import styled from 'styled-components'
 
@@ -29,23 +31,51 @@ const TITLE_HEIGHT = 50
 
 export const TabControl = createContext<Function | null>(null)
 
-const Layout = (): JSX.Element => {
+const TabSpace = ({ view, setView, tabs, setTabs, maxTabs, setMaxTabs }: TabSpaceProps): JSX.Element => {
+  const history = useHistory()
   const { localize } = useContext(Settings)!
-  
-  const [tabs, setTabs] = useState<Array<string>>([])
-  const [view, setView] = useState<string | null>(null)
 
-  const [maxTabs, setMaxTabs] = useState<number>(4)
   useEffect(() => {
     window.addEventListener('resize', () => {
       const currentWidth = remote.getCurrentWindow().getBounds().width
-      const tabSpaceWidth = currentWidth - SIDEBAR_WIDTH - 50 // offset
+      const tabSpaceWidth = currentWidth - SIDEBAR_WIDTH - 50
       setMaxTabs(Math.floor(tabSpaceWidth / TAB_WIDTH))
     })
   }, [])
+
   useEffect(() => {
     if (tabs.length > maxTabs) setTabs(tabs.slice(tabs.length - maxTabs))
   }, [maxTabs])
+  
+  return (
+    <StyledTabSpace>
+      {tabs.map(tab =>
+        <Tab key={tab} selected={tab === view}
+          to={'/' + toDashCase(tab)} onClick={() => setView(tab)}>
+          {localize(tab)}
+          <FontAwesomeIcon icon={faTimes}
+            onClick={e => {
+              e.stopPropagation()
+              setTabs(tabs.filter(tab0 => tab0 !== tab))
+              if (tab === view) {
+                setView(null)
+                history.push('/') // BUG: only routes to the page for a second then blinks out immediately somewhere else.
+              }
+            }} />
+        </Tab>
+      )}
+      <TabTip>{tabs.length}/{maxTabs}</TabTip>
+    </StyledTabSpace>
+  )
+}
+
+const Layout = (): JSX.Element => {
+  const { localize } = useContext(Settings)!
+
+  // Lifting state up from TabSpace component
+  const [view, setView] = useState<string | null>(null)
+  const [tabs, setTabs] = useState<Array<string>>([])
+  const [maxTabs, setMaxTabs] = useState<number>(4)
 
   function updateTabs (linkPressed: string) {
     if (!tabs.includes(linkPressed)) {
@@ -53,29 +83,6 @@ const Layout = (): JSX.Element => {
       else setTabs([...tabs, linkPressed])
     }
     setView(linkPressed)
-  }
-
-  const TabSpace = (): JSX.Element => {
-    return (
-      <StyledTabSpace>
-        {tabs.map(tab =>
-          <Tab key={tab} selected={tab === view}
-            to={'/' + toDashCase(tab)} onClick={() => setView(tab)}>
-            {localize(tab)}
-            <FontAwesomeIcon icon={faTimes}
-              onClick={e => {
-                e.stopPropagation()
-                setTabs(tabs.filter(tab0 => tab0 !== tab))
-                // if (tab === view) {
-                //   setView(null)
-                //   change the page back to welcome / dashboard
-                // }
-              }} />
-          </Tab>
-        )}
-        <TabTip>{tabs.length}/{maxTabs}</TabTip>
-      </StyledTabSpace>
-    )
   }
 
   return (
@@ -87,7 +94,13 @@ const Layout = (): JSX.Element => {
           <Sidebar />
         </TabControl.Provider>
         <Body>
-          <TabSpace />
+          <TabSpace
+            view={view}
+            setView={setView}
+            tabs={tabs}
+            setTabs={setTabs}
+            maxTabs={maxTabs}
+            setMaxTabs={setMaxTabs} />
           <TitleSpace>{localize(view)}</TitleSpace>
           <Content>
             <Suspense fallback={<Loading />}>
@@ -191,6 +204,15 @@ const Content = styled.section`
   background-color: ${({ theme }) => theme.bgDilute};
   overflow: hidden;
 `
+
+interface TabSpaceProps {
+  view: string | null
+  setView: React.Dispatch<React.SetStateAction<string | null>> 
+  tabs: Array<string>
+  setTabs: React.Dispatch<React.SetStateAction<Array<string>>>
+  maxTabs: number
+  setMaxTabs: React.Dispatch<React.SetStateAction<number>>
+}
 
 interface TabProps {
   selected: boolean

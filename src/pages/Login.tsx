@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import React, { useState, useEffect, useContext, memo } from 'react'
 import styled from 'styled-components'
 import { ipcRenderer } from 'electron'
@@ -44,7 +45,10 @@ const Login = (): JSX.Element => {
   const [view, setView] = useState<JSX.Element>(<Loading />)
 
   useEffect(() => {
-    ipcRenderer.once('connected', () => setView(window.sessionStorage.getItem('Profile') ? <Layout/> : <Auth />))
+    ipcRenderer.once('connected', () =>
+      setView(window.sessionStorage.getItem('Profile') ? <Layout/> : <Auth />)
+    )
+
     ipcRenderer.send('connect')
 
     ipcRenderer.once('login-success', (event, profileInfo) => {
