@@ -1,222 +1,222 @@
 {
-    "username": {
-        "en": "Username",
-        "id": "Nama Pengguna"
-    },
-    "password": {
-        "en": "Password",
-        "id": "Kata Sandi"
-    },
-    "login": {
-        "en": "Login",
-        "id": "Masuk"
-    },
-    "gMorning": {
-        "en": "Good morning",
-        "id": "Selamat pagi"
-    },
-    "gAfternoon": {
-        "en": "Good afternoon",
-        "id": "Selamat siang"
-    },
-    "gEvening": {
-        "en": "Good evening",
-        "id": "Selamat sore"
-    },
-    "gNight": {
-        "en": "Good night",
-        "id": "Selamat malam"
-    },
-    "gToday": {
-        "en": "Today is",
-        "id": "Hari ini tanggal"
-    },
-    "gNow": {
-        "en": "It is now",
-        "id": "Pukul"
-    },
-    "profile": {
-        "en": "Profile",
-        "id": "Profil"
-    },
-    "shipping": {
-        "en": "Shipping",
-        "id": "Pengiriman"
-    },
-    "seaFreight": {
-        "en": "Sea Freight",
-        "id": "Angkutan Laut"
-    },
-    "airCargo": {
-        "en": "Air Cargo",
-        "id": "Kargo Udara"
-    },
-    "invoiceEntry": {
-        "en": "Invoice Entry",
-        "id": "Entri Faktur"
-    },
-    "payment": {
-        "en": "Payment",
-        "id": "Pembayaran"
-    },
-    "customers": {
-        "en": "Customers",
-        "id": "Pelanggan"
-    },
-    "references": {
-        "en": "References",
-        "id": "Referensi"
-    },
-    "containerGroups": {
-        "en": "Container Groups",
-        "id": "Kelompok Kontainer"
-    },
-    "carriers": {
-        "en": "Shippers",
-        "id": "Pengirim Barang"
-    },
-    "routes": {
-        "en": "Routes",
-        "id": "Rute"
-    },
-    "handlers": {
-        "en": "Handlers",
-        "id": "Pengurus"
-    },
-    "planes": {
-        "en": "Planes",
-        "id": "Pesawat"
-    },
-    "currencies": {
-        "en": "Currencies",
-        "id": "Mata Uang"
-    },
-    "productDetails": {
-        "en": "Product Details",
-        "id": "Keterangan Barang"
-    },
-    "expeditions": {
-        "en": "Expeditions",
-        "id": "Expedisi"
-    },
-    "reports": {
-        "en": "Reports",
-        "id": "Laporan"
-    },
-    "dashboard": {
-        "en": "Dashboard",
-        "id": "Dasbor"
-    },
-    "payroll": {
-        "en": "Payroll",
-        "id": "Daftar Gaji"
-    },
-    "master": {
-        "en": "Master",
-        "id": "Master"
-    },
-    "staff": {
-        "en": "Staff",
-        "id": "Staf"
-    },
-    "staffGroups": {
-        "en": "Staff Groups",
-        "id": "Kelompok Staf"
-    },
-    "accessLevels": {
-        "en": "Access Levels",
-        "id": "Tingkat Akses"
-    },
-    "companySetup": {
-        "en": "Company Setup",
-        "id": "Pengaturan Perusahaan"
-    },
-    "settings": {
-        "en": "Settings",
-        "id": "Pengaturan"
-    },
-    "databaseSetup": {
-        "en": "Database Setup",
-        "id": "Pengaturan Database"
-    },
-    "backupRestore": {
-        "en": "Backup and Restore",
-        "id": "Pecadangan dan Pemulihan"
-    },
-    "viewProfile": {
-        "en": "View Profile",
-        "id": "Lihat Profil"
-    },
-    "theme": {
-        "en": "Theme",
-        "id": "Tema"
-    },
-    "language": {
-        "en": "Language",
-        "id": "Bahasa"
-    },
-    "logoutExit": {
-        "en": "Logout and Exit",
-        "id": "Logout dan Keluar"
-    },
-    "staffId": {
-        "en": "Staff ID",
-        "id": "Nomor Identitas"
-    },
-    "fullName": {
-        "en": "Full Name",
-        "id": "Nama Lengkap"
-    },
-    "staffGroup": {
-        "en": "Job Group",
-        "id": "Posisi Perkerjaan"
-    },
-    "address": {
-        "en": "Address",
-        "id": "Alamat"
-    },
-    "district": {
-        "en": "District",
-        "id": "Distrik"
-    },
-    "city": {
-        "en": "City",
-        "id": "Kota"
-    },
-    "phoneNumber": {
-        "en": "Phone Number",
-        "id": "Nomor Telepon"
-    },
-    "gender": {
-        "en": "Gender",
-        "id": "Jenis Kelamin"
-    },
-    "birthplace": {
-        "en": "Place of Birth",
-        "id": "Tempat Lahir"
-    },
-    "birthday": {
-        "en": "Date of Birth",
-        "id": "Tanggal Lahir"
-    },
-    "overtime": {
-        "en": "Overtime Pay",
-        "id": "Lembur"
-    },
-    "salary": {
-        "en": "Salary",
-        "id": "Gaji"
-    },
-    "allowance": {
-        "en": "Meal Allowance",
-        "id": "Uang Makan"
-    },
-    "diligenceBonus": {
-        "en": "Diligence Bonus",
-        "id": "Uang Kerajinan"
-    },
-    "employmentDate": {
-        "en": "Date of Employment",
-        "id": "Tanggal Pertama Kerja"
-    }
+  "username": {
+    "en": "Username",
+    "id": "Nama Pengguna"
+  },
+  "password": {
+    "en": "Password",
+    "id": "Kata Sandi"
+  },
+  "login": {
+    "en": "Login",
+    "id": "Masuk"
+  },
+  "gMorning": {
+    "en": "Good morning",
+    "id": "Selamat pagi"
+  },
+  "gAfternoon": {
+    "en": "Good afternoon",
+    "id": "Selamat siang"
+  },
+  "gEvening": {
+    "en": "Good evening",
+    "id": "Selamat sore"
+  },
+  "gNight": {
+    "en": "Good night",
+    "id": "Selamat malam"
+  },
+  "gToday": {
+    "en": "Today is",
+    "id": "Hari ini tanggal"
+  },
+  "gNow": {
+    "en": "It is now",
+    "id": "Pukul"
+  },
+  "profile": {
+    "en": "Profile",
+    "id": "Profil"
+  },
+  "shipping": {
+    "en": "Shipping",
+    "id": "Pengiriman"
+  },
+  "seaFreight": {
+    "en": "Sea Freight",
+    "id": "Angkutan Laut"
+  },
+  "airCargo": {
+    "en": "Air Cargo",
+    "id": "Kargo Udara"
+  },
+  "invoiceEntry": {
+    "en": "Invoice Entry",
+    "id": "Entri Faktur"
+  },
+  "payment": {
+    "en": "Payment",
+    "id": "Pembayaran"
+  },
+  "customers": {
+    "en": "Customers",
+    "id": "Pelanggan"
+  },
+  "references": {
+    "en": "References",
+    "id": "Referensi"
+  },
+  "containerGroups": {
+    "en": "Container Groups",
+    "id": "Kelompok Kontainer"
+  },
+  "carriers": {
+    "en": "Shippers",
+    "id": "Pengirim Barang"
+  },
+  "routes": {
+    "en": "Routes",
+    "id": "Rute"
+  },
+  "handlers": {
+    "en": "Handlers",
+    "id": "Pengurus"
+  },
+  "planes": {
+    "en": "Planes",
+    "id": "Pesawat"
+  },
+  "currencies": {
+    "en": "Currencies",
+    "id": "Mata Uang"
+  },
+  "productDetails": {
+    "en": "Product Details",
+    "id": "Keterangan Barang"
+  },
+  "expeditions": {
+    "en": "Expeditions",
+    "id": "Expedisi"
+  },
+  "reports": {
+    "en": "Reports",
+    "id": "Laporan"
+  },
+  "dashboard": {
+    "en": "Dashboard",
+    "id": "Dasbor"
+  },
+  "payroll": {
+    "en": "Payroll",
+    "id": "Daftar Gaji"
+  },
+  "master": {
+    "en": "Master",
+    "id": "Master"
+  },
+  "staff": {
+    "en": "Staff",
+    "id": "Staf"
+  },
+  "staffGroups": {
+    "en": "Staff Groups",
+    "id": "Kelompok Staf"
+  },
+  "accessLevels": {
+    "en": "Access Levels",
+    "id": "Tingkat Akses"
+  },
+  "companySetup": {
+    "en": "Company Setup",
+    "id": "Pengaturan Perusahaan"
+  },
+  "settings": {
+    "en": "Settings",
+    "id": "Pengaturan"
+  },
+  "databaseSetup": {
+    "en": "Database Setup",
+    "id": "Pengaturan Database"
+  },
+  "backupRestore": {
+    "en": "Backup and Restore",
+    "id": "Pecadangan dan Pemulihan"
+  },
+  "viewProfile": {
+    "en": "View Profile",
+    "id": "Lihat Profil"
+  },
+  "theme": {
+    "en": "Theme",
+    "id": "Tema"
+  },
+  "language": {
+    "en": "Language",
+    "id": "Bahasa"
+  },
+  "logoutExit": {
+    "en": "Logout and Exit",
+    "id": "Logout dan Keluar"
+  },
+  "staffId": {
+    "en": "Staff ID",
+    "id": "Nomor Identitas"
+  },
+  "fullName": {
+    "en": "Full Name",
+    "id": "Nama Lengkap"
+  },
+  "staffGroup": {
+    "en": "Job Group",
+    "id": "Posisi Perkerjaan"
+  },
+  "address": {
+    "en": "Address",
+    "id": "Alamat"
+  },
+  "district": {
+    "en": "District",
+    "id": "Distrik"
+  },
+  "city": {
+    "en": "City",
+    "id": "Kota"
+  },
+  "phoneNumber": {
+    "en": "Phone Number",
+    "id": "Nomor Telepon"
+  },
+  "gender": {
+    "en": "Gender",
+    "id": "Jenis Kelamin"
+  },
+  "birthplace": {
+    "en": "Place of Birth",
+    "id": "Tempat Lahir"
+  },
+  "birthday": {
+    "en": "Date of Birth",
+    "id": "Tanggal Lahir"
+  },
+  "overtime": {
+    "en": "Overtime Pay",
+    "id": "Lembur"
+  },
+  "salary": {
+    "en": "Salary",
+    "id": "Gaji"
+  },
+  "allowance": {
+    "en": "Meal Allowance",
+    "id": "Uang Makan"
+  },
+  "diligenceBonus": {
+    "en": "Diligence Bonus",
+    "id": "Uang Kerajinan"
+  },
+  "employmentDate": {
+    "en": "Date of Employment",
+    "id": "Tanggal Pertama Kerja"
+  }
 }

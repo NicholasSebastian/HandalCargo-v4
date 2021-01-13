@@ -43,12 +43,13 @@ const Form = ({ formData, setFormData, setOnSubmit }: FormFragmentProps): JSX.El
 
   return (
     <Fragment>
-      <Input label="Staff ID" ref={staffIdRef} defaultValue={formData[1]} placeholder='e.g. jacky123' />
-      <DoubleInput label="Full Name" ref={firstNameRef} ref2={lastNameRef}
+      <Input label="Staff ID" Ref={staffIdRef} defaultValue={formData[1]} placeholder='e.g. jacky123' />
+      <DoubleInput label="Full Name" Ref={firstNameRef} Ref2={lastNameRef}
         defaultValue={staffName.firstName}
         defaultValue2={staffName.lastName}
         placeholder='First Name' placeholder2='Last Name' />
-      <ComboBox label="Staff Group" ref={staffGroupRef} options={staffGroup ? staffGroup.map(object => Object.values(object) as [string, string]) : null} />
+      <ComboBox label="Staff Group" Ref={staffGroupRef}
+        options={staffGroup ? staffGroup.map(object => Object.values(object) as [string, string]) : null} />
     </Fragment>
   )
 }

@@ -97,11 +97,6 @@ const SubButtonGroup = styled.div<ButtonProps>`
   }
 `
 
-interface SidebarElement {
-  buttonName: string,
-  subButtonNames: Array<string>
-}
-
 interface ButtonProps {
   selected: boolean
 }
