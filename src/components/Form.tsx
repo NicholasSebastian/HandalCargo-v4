@@ -5,8 +5,10 @@ import styled from 'styled-components'
 
 const Form = ({ FormFragment, returnFunction, initialData, queryOnClick }: FormProps): JSX.Element => {
   const [formData, setFormData] = useState<Array<string>>(initialData || [])
+  const [onSubmit, setOnSubmit] = useState<() => void>()
 
   function handleSave () {
+    if (onSubmit) onSubmit()
     queryOnClick!(formData)
     returnFunction()
   }
@@ -16,9 +18,10 @@ const Form = ({ FormFragment, returnFunction, initialData, queryOnClick }: FormP
       <div>
         <FormFragment // All form elements should reflect the formData state.
           formData={formData}
-          setFormData={setFormData} />
+          setFormData={setFormData}
+          setOnSubmit={setOnSubmit} />
         {queryOnClick && <button onClick={handleSave}>Save</button>}
-        <button onClick={returnFunction}>Cancel</button>
+        <button onClick={returnFunction}>Back</button>
       </div>
     </StyledFormArea>
   )
@@ -67,4 +70,5 @@ interface FormProps {
 export interface FormFragmentProps {
   formData: Array<string>
   setFormData: React.Dispatch<React.SetStateAction<string[]>>
+  setOnSubmit: React.Dispatch<React.SetStateAction<(() => void) | undefined>>
 }

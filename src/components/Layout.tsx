@@ -1,9 +1,10 @@
+/* eslint-disable indent */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import React, { useState, useContext, useEffect, createContext, memo, lazy, Suspense } from 'react'
+import React, { useState, useContext, useEffect, useRef, createContext, memo, lazy, Suspense, Fragment } from 'react'
 import { HashRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom'
 import { remote } from 'electron'
 import styled from 'styled-components'
@@ -12,7 +13,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import { Settings } from './Context'
-import toDashCase from '../utils/ToDashCase'
 
 import Header from './Header'
 import Sidebar from './Sidebar'
@@ -21,7 +21,7 @@ import Loading from './Loading'
 const Welcome = lazy(() => import('../pages/Welcome'))
 const Dashboard = lazy(() => import('../pages/Dashboard'))
 const Profile = lazy(() => import('../pages/Profile'))
-const Staff = lazy(() => import('../pages/Staff'))
+const Staff = lazy(() => import('../pages/Staff/Index'))
 
 const HEADER_HEIGHT = 50
 const SIDEBAR_WIDTH = 250
@@ -32,7 +32,7 @@ const TITLE_HEIGHT = 50
 export const TabControl = createContext<Function | null>(null)
 
 const TabSpace = ({ view, setView, tabs, setTabs, maxTabs, setMaxTabs }: TabSpaceProps): JSX.Element => {
-  const history = useHistory()
+  const history = useHistory() // maybe use Hash History instead??
   const { localize } = useContext(Settings)!
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const TabSpace = ({ view, setView, tabs, setTabs, maxTabs, setMaxTabs }: TabSpac
     <StyledTabSpace>
       {tabs.map(tab =>
         <Tab key={tab} selected={tab === view}
-          to={'/' + toDashCase(tab)} onClick={() => setView(tab)}>
+          to={'/' + tab} onClick={() => setView(tab)}>
           {localize(tab)}
           <FontAwesomeIcon icon={faTimes}
             onClick={e => {
@@ -59,7 +59,7 @@ const TabSpace = ({ view, setView, tabs, setTabs, maxTabs, setMaxTabs }: TabSpac
               setTabs(tabs.filter(tab0 => tab0 !== tab))
               if (tab === view) {
                 setView(null)
-                history.push('/') // BUG: only routes to the page for a second then blinks out immediately somewhere else.
+                history.push('/') // BUG: only routes to the page for a second then immediately blinks back into the previous page.
               }
             }} />
         </Tab>
@@ -67,6 +67,12 @@ const TabSpace = ({ view, setView, tabs, setTabs, maxTabs, setMaxTabs }: TabSpac
       <TabTip>{tabs.length}/{maxTabs}</TabTip>
     </StyledTabSpace>
   )
+}
+
+// Pseudo HOC for determining welcome screen according to account access level.
+const WelcomeOrDashboard = (): JSX.Element => {
+  const { level } = JSON.parse(window.sessionStorage.getItem('Profile')!)
+  return level < 2 ? <Welcome /> : <Dashboard />
 }
 
 const Layout = (): JSX.Element => {
@@ -105,7 +111,7 @@ const Layout = (): JSX.Element => {
           <Content>
             <Suspense fallback={<Loading />}>
               <Switch>
-                <Route path="/" exact component={ Welcome } />
+                <Route path="/" exact component={ WelcomeOrDashboard } />
                 <Route path="/dashboard" component={ Dashboard } />
                 <Route path="/staff" component={ Staff } />
                 <Route path="/profile" component={ Profile } />

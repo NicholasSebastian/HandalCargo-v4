@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-expressions */
+
 import { BrowserWindow, dialog } from 'electron'
 import '@babel/polyfill'
 import * as path from 'path'

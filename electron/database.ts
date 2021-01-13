@@ -1,14 +1,15 @@
 /* eslint-disable no-multi-str */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-expressions */
-import { dialog, ipcMain } from 'electron'
+
+import { ipcMain, dialog } from 'electron'
 import mariadb from 'mariadb'
 import '@babel/polyfill'
 
 import { windowInstance } from './main'
 
 import connectionSettings from './Connection.json'
-// const DB_PING_INTERVAL = 60000
+const DB_PING_INTERVAL = 60000
 
 class Connection {
   connection: mariadb.Connection | undefined
@@ -18,7 +19,7 @@ class Connection {
       .then(connection => {
         this.connection = connection
         this.connection.on('error', Connection.handleConnectionError)
-        // this.createConnectionHeartbeat()
+        this.createConnectionHeartbeat()
         event.reply('connected')
       })
       .catch(Connection.handleConnectionError)
@@ -30,7 +31,7 @@ class Connection {
         .then((data: Array<any>) => {
           event.reply(replyKey, data)
         })
-        .catch(Connection.handleQueryFailure)
+        .catch(error => dialog.showErrorBox('Query failed', error.message))
     } else {
       Connection.handleConnectionError()
     }
@@ -43,7 +44,7 @@ class Connection {
           event.returnValue = data
         })
         .catch(error => {
-          Connection.handleQueryFailure(error)
+          dialog.showErrorBox('Query failed', error.message)
           event.returnValue = null
         })
     } else {
@@ -71,51 +72,32 @@ class Connection {
             )
           event.reply('login-success', profileInfo[0])
         } else {
-          dialog.showMessageBox({
-            message: 'Invalid Login credentials',
-            detail: 'Incorrect username or password.'
-          })
+          dialog.showErrorBox('Invalid Login credentials', 'Incorrect username or password.')
           event.reply('login-failed')
         }
       })
       .catch(Connection.handleConnectionError)
   }
 
-  // private createConnectionHeartbeat () {
-  //   setInterval(() => {
-  //     console.log('Pinging the database server.')
-  //     this.connection?.ping()
-  //       .catch(Connection.handleConnectionError)
-  //   }, DB_PING_INTERVAL)
-  // }
+  private createConnectionHeartbeat () {
+    setInterval(() => {
+      console.log('Pinging the database server.')
+      this.connection?.query('SELECT 1')
+        .catch(Connection.handleConnectionError)
+    }, DB_PING_INTERVAL)
+  }
 
   private static handleConnectionError (error?: mariadb.SqlError) {
     if (error) {
       if (error.code === 'ECONNREFUSED') {
-        dialog.showMessageBoxSync({
-          message: 'Connection Refused',
-          detail: 'There was a problem connecting to the database server.'
-        })
+        dialog.showErrorBox('Connection Refused', 'There was a problem connecting to the database server.')
       } else {
-        dialog.showMessageBoxSync({
-          message: 'Fatal Error occured',
-          detail: `${error.code}: ${error.message}`
-        })
+        dialog.showErrorBox('Fatal Error occured', `${error.code}: ${error.message}`)
       }
     } else {
-      dialog.showMessageBoxSync({
-        message: 'Connection ended',
-        detail: 'Connection with database unexpectedly is no longer valid.'
-      })
+      dialog.showErrorBox('Connection ended', 'Connection with database unexpectedly is no longer valid.')
     }
     windowInstance.window?.close()
-  }
-
-  private static handleQueryFailure (error: any) {
-    dialog.showMessageBox({
-      message: 'Query failed',
-      detail: error.message
-    })
   }
 }
 

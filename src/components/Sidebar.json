@@ -1,0 +1,32 @@
+[
+  {
+    "buttonName": "shipping",
+    "subButtonNames": [
+      "seaFreight", "airCargo", "invoiceEntry", "payment", "customers"
+    ]
+  },
+  {
+    "buttonName": "references",
+    "subButtonNames": [
+      "containerGroups", "carriers", "routes", "handlers", "planes", "currencies", "productDetails", "expeditions"
+    ]
+  },
+  {
+    "buttonName": "reports",
+    "subButtonNames": [
+      "dashboard", "payroll"
+    ]
+  },
+  {
+    "buttonName": "master",
+    "subButtonNames": [
+      "staff", "staffGroups", "accessLevels", "companySetup"
+    ]
+  },
+  {
+    "buttonName": "settings",
+    "subButtonNames": [
+      "databaseSetup", "backupRestore"
+    ]
+  }
+]

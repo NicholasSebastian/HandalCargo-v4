@@ -35,6 +35,10 @@
         "en": "It is now",
         "id": "Pukul"
     },
+    "profile": {
+        "en": "Profile",
+        "id": "Profil"
+    },
     "shipping": {
         "en": "Shipping",
         "id": "Pengiriman"

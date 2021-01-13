@@ -25,7 +25,6 @@ const Table = ({
   useEffect(() => {
     ipcRenderer.once(id, (event, data) => setData(data))
     ipcRenderer.send('query', tableQuery, [], id)
-    console.log(filter)
   }, [])
 
   function handleDelete (primaryKey: string) {
@@ -224,7 +223,6 @@ const StyledPanel = styled.div`
   > div {
     background-color: ${({ theme }) => theme.bg};
     border-radius: 5px;
-    padding: 15px;
     box-shadow: 0 0 5px ${({ theme }) => theme.fgWeak};
     margin-bottom: 10px;
 
@@ -233,6 +231,16 @@ const StyledPanel = styled.div`
       > input { 
         background: none;
         border: none; 
+      }
+    }
+
+    &:last-child {
+      padding: 15px;
+
+      > h2 {
+        color: ${({ theme }) => theme.fgStrong};
+        margin: 0;
+        font-size: 16px;
       }
     }
   }

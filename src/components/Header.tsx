@@ -37,7 +37,7 @@ const ProfileDropDown = (): JSX.Element => {
   const updateTab = useContext(TabControl)!
   return (
     <StyledDropdown>
-      <Link to='/profile' onClick={() => updateTab('Profile')}>
+      <Link to='/profile' onClick={() => updateTab(localize('profile'))}>
         {localize('viewProfile')}
       </Link>
       <button onClick={() => setTheme(theme === 'Light' ? 'Dark' : 'Light')}>

@@ -4,8 +4,6 @@ import React, { useRef, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import { Settings } from '../components/Context'
 
-// TODO: If access level greater than 1, redirect to dashboard
-
 const Welcome = (): JSX.Element => {
   const { localize } = useContext(Settings)!
 

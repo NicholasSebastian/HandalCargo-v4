@@ -28,7 +28,7 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
     - [ ] Add, Modify, Delete.
 - [ ] Pages
 - [x] Welcome screen
-  - [ ] '/' page varies depending on access level.
+  - [x] '/' page varies depending on access level.
     - L1: Welcome screen.
     - L2/L3: Dashboard.
 - [ ] Dashboard
@@ -40,6 +40,7 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
 
 ## Miscellaneous Tasks
 
+- [ ] Transition animations.
 - [x] Dark Theme color scheme.
 - [ ] Localization translation map.
 - [x] Login page image.
@@ -56,11 +57,12 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
 
 ## Currently known problems to be fixed
 
-- [x] Find a better way to keep the connection alive.
+- [x] Connection with database timeouts and ends on its own (ECONNRESET).
 - [ ] According to [this link](https://stackoverflow.com/questions/47875097/add-element-to-a-state-react), Components should not be stored in nor rendered from state. Hence, the Login page should be rewritten with respect to good practice.
 - [ ] Changing language or theme closes the currently open page.
 - [ ] Closing a tab also routes to the page.
 - [ ] Should route to '/' page when closing the currently open tab but blinks out immediately instead.
 - [x] Template states cause memory leaks.
+- [ ] Changing languages does not change already open titles and tab labels.
 
 Note: List is still incomplete.

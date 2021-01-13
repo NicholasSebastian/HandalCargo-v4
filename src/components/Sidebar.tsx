@@ -1,78 +1,43 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import React, { memo, useContext, useState } from 'react'
+import React, { memo, useContext, useState, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBoxOpen, faThLarge, faCopy, faUser, faCog, IconDefinition } from '@fortawesome/free-solid-svg-icons'
+import { faBoxOpen, faThLarge, faCopy, faUser, faCog } from '@fortawesome/free-solid-svg-icons'
 
 import { Settings } from './Context'
 import { TabControl } from './Layout'
-import toDashCase from '../utils/ToDashCase'
+import elements from './Sidebar.json'
 
-const elements: Array<SidebarElement> = [
-  {
-    buttonIcon: faBoxOpen,
-    buttonName: 'shipping',
-    subButtonNames: [
-      'seaFreight', 'airCargo', 'invoiceEntry', 'payment', 'customers'
-    ]
-  },
-  {
-    buttonIcon: faThLarge,
-    buttonName: 'references',
-    subButtonNames: [
-      'containerGroups', 'carriers', 'routes', 'handlers', 'planes', 'currencies', 'productDetails', 'expeditions'
-    ]
-  },
-  {
-    buttonIcon: faCopy,
-    buttonName: 'reports',
-    subButtonNames: [
-      'dashboard', 'payroll'
-    ]
-  },
-  {
-    buttonIcon: faUser,
-    buttonName: 'master',
-    subButtonNames: [
-      'staff', 'staffGroups', 'accessLevels', 'companySetup'
-    ]
-  },
-  {
-    buttonIcon: faCog,
-    buttonName: 'settings',
-    subButtonNames: [
-      'databaseSetup', 'backupRestore'
-    ]
-  }
-]
+const icons = [faBoxOpen, faThLarge, faCopy, faUser, faCog]
 
 const Sidebar = (): JSX.Element => {
   const { localize } = useContext(Settings)!
   const updateTab = useContext(TabControl)!
+
   const [selected, setSelected] = useState<number | null>(null)
 
   return (
     <StyledSidebar>
-      {elements.map(({ buttonIcon, buttonName, subButtonNames }, index) =>
-        <React.Fragment key={index}>
+      {elements.map(({ buttonName, subButtonNames }, index) =>
+        <Fragment key={index}>
           <Button selected={selected === index}
             onClick={() => setSelected(selected === index ? null : index)}>
-            <FontAwesomeIcon icon={buttonIcon} size="lg" fixedWidth />
+            <FontAwesomeIcon icon={icons[index]} size="lg" fixedWidth />
             {localize(buttonName)}
           </Button>
           <SubButtonGroup selected={selected === index}>
             {subButtonNames.map((subButtonName, subIndex) =>
-              <Link key={subIndex} to={'/' + toDashCase(subButtonName)}
+              <Link key={subIndex} to={'/' + subButtonName}
                 onClick={() => updateTab(subButtonName)}>
                 {localize(subButtonName)}
               </Link>
             )}
           </SubButtonGroup>
-        </React.Fragment>
+        </Fragment>
       )}
     </StyledSidebar>
   )
@@ -96,6 +61,7 @@ const Button = styled.button<ButtonProps>`
   align-items: center;
   font-size: 14px;
   text-align: left;
+  position: relative;
 
   > svg {
     margin-right: 15px;
@@ -104,6 +70,13 @@ const Button = styled.button<ButtonProps>`
   &:hover {
     cursor: pointer;
     ${({ selected, theme }) => !selected && { color: theme.fgStrong }};
+  }
+
+  &::after {
+    content: '˅'; // change this, it looks ugly.
+    position: absolute;
+    right: 20px;
+    font-weight: 900;
   }
 `
 
@@ -125,7 +98,6 @@ const SubButtonGroup = styled.div<ButtonProps>`
 `
 
 interface SidebarElement {
-  buttonIcon: IconDefinition,
   buttonName: string,
   subButtonNames: Array<string>
 }
