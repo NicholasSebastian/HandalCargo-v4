@@ -6,6 +6,7 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
 
 - [x] Abstractions for management of window and database connection processes.
 - [x] Login Screen and Functionality.
+  - [x] Loading transition.
 - [ ] Encryption for passwords.
 - [x] Layout for the main application window.
   - [x] Header with Profile Button and Dropdown, etc.
@@ -19,20 +20,46 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
 - [ ] Templates
   - [x] Complex Template for 'Shipping' pages and 'Staff' page.
     - [x] Table
-    - [x] Add, Modify, Delete.
+    - [x] Delete functionality.
     - [x] Search and filter.
     - [x] Forms
       - [ ] Form Validation.
+      - [ ] Add functionality.
+      - [x] View functionality.
+      - [ ] Edit functionality.
+      - [ ] Form Components
+        - [x] Headers
+        - [x] Text input boxes
+        - [x] ComboBox
+        - [ ] Date Picker
   - [ ] Simple Template for 'References' pages and 'Staff Groups' page.
     - [ ] List
     - [ ] Add, Modify, Delete.
-- [ ] Pages
 - [x] Welcome screen
   - [x] '/' page varies depending on access level.
     - L1: Welcome screen.
     - L2/L3: Dashboard.
-- [ ] Dashboard
-- [ ] Payroll???
+- [ ] Pages
+  - [ ] Shipping
+    - [ ] Sea Freight
+    - [ ] Air Cargo
+    - [ ] Invoice Entry
+    - [ ] Payment
+    - [ ] Customers
+  - [ ] References
+    - etcetra...
+  - [ ] Reports
+    - [ ] Dashboard
+    - [ ] Payroll???
+  - [ ] Master
+    - [ ] Staff
+      - [ ] Profile images
+    - [ ] Staff Groups
+    - [ ] Access Levels
+    - [ ] Company Setup
+  - [ ] Settings
+    - [ ] Database Setup
+    - [ ] Backup and Restore
 - [ ] Formatted PDF report generation, printing functionality.
 - [ ] Header utilities (e.g. calculator and notes)
 - [ ] Basic email.
@@ -40,7 +67,7 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
 
 ## Miscellaneous Tasks
 
-- [ ] Transition animations.
+- [ ] Transition animations??
 - [x] Dark Theme color scheme.
 - [ ] Localization translation map.
 - [x] Login page image.
@@ -57,6 +84,7 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
 
 ## Currently known problems to be fixed
 
+- [ ] Electron's setMinimumSize is bugged / not working.
 - [x] Connection with database timeouts and ends on its own (ECONNRESET).
 - [ ] According to [this link](https://stackoverflow.com/questions/47875097/add-element-to-a-state-react), Components should not be stored in nor rendered from state. Hence, the Login page should be rewritten with respect to good practice.
 - [ ] Changing language or theme closes the currently open page.

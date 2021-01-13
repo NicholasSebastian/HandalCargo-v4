@@ -31,16 +31,69 @@ export default Form
 
 const StyledFormArea = styled.div<{ editable: boolean }>`
   height: 100%;
-  padding: 20px;
 
   > div {
     background-color: ${({ theme }) => theme.bg};
     border-radius: 5px;
-    padding: 15px;
+    margin: 20px;
+    padding: 25px;
     box-shadow: 0 0 5px ${({ theme }) => theme.fgWeak};
 
-    input { 
-      pointer-events: ${({ editable }) => editable ? 'auto' : 'none'}; 
+    h1, h2 {
+      color: ${({ theme }) => theme.fgStrong};
+    }
+
+    h5 {
+      color: ${({ theme }) => theme.fgMid};
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    label {
+      color: ${({ theme }) => theme.fgStrong};
+      display: inline-block;
+      padding-right: 15px;
+      font-size: 13px;
+      font-weight: bolder;
+      text-align: right;
+    }
+
+    select {
+      appearance: ${({ editable }) => editable ? 'auto' : 'none'};
+
+      &:hover {
+        cursor: ${({ editable }) => editable ? 'pointer' : 'default'};
+      }
+    }
+
+    input, select { 
+      pointer-events: ${({ editable }) => editable ? 'auto' : 'none'};
+      background-color: ${({ theme }) => theme.fgWeak};
+      border: 1px solid transparent;
+      border-radius: 5px;
+      padding: 8px 12px;
+      font-size: 12px;
+
+      &::placeholder {
+        visibility: ${({ editable }) => editable ? 'visible' : 'hidden'};
+      }
+
+      &:focus {
+        border-color: ${({ theme }) => theme.accent};
+        outline: none;
+      }
+    }
+
+    hr {
+      margin: 25px 0;
+    }
+
+    > div {
+      margin-bottom: 15px;
     }
 
     > button {
@@ -50,6 +103,7 @@ const StyledFormArea = styled.div<{ editable: boolean }>`
       border-radius: 5px;
       width: 70px;
       padding: 10px 0;
+      margin-top: 20px;
       margin-right: 10px;
 
       &:hover {

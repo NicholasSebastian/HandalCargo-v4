@@ -1,9 +1,38 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import React, { MutableRefObject } from 'react'
+import React, { MutableRefObject, useEffect } from 'react'
 import styled from 'styled-components'
 
 const LABEL_WIDTH = 140
+
+interface HeadingProps {
+  header: string
+  description: string
+}
+
+export const Heading = (props: HeadingProps): JSX.Element => {
+  return (
+    <HeadingStyles>
+      <h2>{props.header}</h2>
+      <h5>{props.description}</h5>
+    </HeadingStyles>
+  )
+}
+
+const HeadingStyles = styled.div`
+  > h2 {
+    margin: 0;
+    font-size: 18px;
+  }
+
+  > h5 {
+    margin-top: 5px;
+    margin-bottom: 25px;
+    font-size: 14px;
+    font-weight: normal;
+  }
+`
 
 interface InputProps {
   label: string
@@ -26,9 +55,10 @@ export const Input = (props: InputProps): JSX.Element => {
 }
 
 const InputStyles = styled.div`
+  display: grid;
+  grid-template-columns: ${LABEL_WIDTH}px 1fr;
   > label {
-    display: inline-block;
-    width: ${LABEL_WIDTH}px;
+    padding-top: 7.5px;
   }
 `
 
@@ -62,19 +92,25 @@ export const DoubleInput = (props: DoubleInputProps): JSX.Element => {
 }
 
 const DoubleInputStyles = styled.div`
+  display: grid;
+  grid-template-columns: ${LABEL_WIDTH}px 1fr 1fr;
   > label {
-    display: inline-block;
-    width: ${LABEL_WIDTH}px;
+    padding-top: 7.5px;
+  }
+  > input:first-of-type {
+    margin-right: 10px;
   }
 `
 
 interface ComboBoxProps {
   label: string
   Ref: MutableRefObject<any>
-  options: Array<[string, string]> | null
+  options: Array<[string | number, string]> | null
+  defaultValue: string
 }
 
 export const ComboBox = (props: ComboBoxProps): JSX.Element => {
+  useEffect(() => { if (props.defaultValue) props.Ref.current.value = props.defaultValue }, [])
   return (
     <ComboBoxStyles>
       <label>{props.label}</label>
@@ -89,7 +125,6 @@ export const ComboBox = (props: ComboBoxProps): JSX.Element => {
 
 const ComboBoxStyles = styled.div`
   > label {
-    display: inline-block;
     width: ${LABEL_WIDTH}px;
   }
 `

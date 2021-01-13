@@ -113,8 +113,8 @@ const Layout = (): JSX.Element => {
               <Switch>
                 <Route path="/" exact component={ WelcomeOrDashboard } />
                 <Route path="/dashboard" component={ Dashboard } />
-                <Route path="/staff" component={ Staff } />
                 <Route path="/profile" component={ Profile } />
+                <Route path="/staff" component={ Staff } />
               </Switch>
             </Suspense>
           </Content>
@@ -131,6 +131,7 @@ const StyledLayout = styled.div`
   grid-template-columns: ${SIDEBAR_WIDTH}px 1fr;
   grid-template-rows: ${HEADER_HEIGHT}px 1fr;
   height: 100%;
+  overflow: hidden;
 `
 
 const Title = styled.h1`
@@ -149,6 +150,7 @@ const Body = styled.section`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: ${TABSPACE_HEIGHT}px ${TITLE_HEIGHT}px 1fr;
+  overflow: hidden;
 `
 
 const StyledTabSpace = styled.div`
@@ -208,7 +210,7 @@ const TitleSpace = styled.div`
 
 const Content = styled.section`
   background-color: ${({ theme }) => theme.bgDilute};
-  overflow: hidden;
+  overflow-y: scroll;
 `
 
 interface TabSpaceProps {

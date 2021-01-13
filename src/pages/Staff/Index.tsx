@@ -20,7 +20,7 @@ const Staff = (): JSX.Element => {
         ON `staff`.`groupcode` = `staffgroup`.`stfgrcode`'
       }
       formQuery={'\
-        SELECT `profilepic`, `staffid`, `staffname`, `pwd`, `level`, `groupcode`, \
+        SELECT `profilepic`, `staffid`, `staffname`, `level`, `groupcode`, \
           `address1`, `district`, `city`, `phonenum`, `gender`, `placeofbirth`, `dateofbirth`, \
           `ot/hr`, `salary`, `foodallowance`, `bonus`, `dilligencebonus`, `status`, `dateofemployment` \
         FROM `staff` \

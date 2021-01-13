@@ -76,13 +76,12 @@ const Button = styled.button<ButtonProps>`
     content: '˅'; // change this, it looks ugly.
     position: absolute;
     right: 20px;
-    font-weight: 900;
   }
 `
 
 const SubButtonGroup = styled.div<ButtonProps>`
-  display: ${({ selected }) => selected ? 'block' : 'none'};
   padding-left: 60px;
+  display: ${({ selected }) => selected ? 'block' : 'none'};
 
   > a {
     color: ${({ theme }) => theme.fgMid};
