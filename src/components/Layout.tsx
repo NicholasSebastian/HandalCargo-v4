@@ -1,21 +1,15 @@
-/* eslint-disable indent */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable no-trailing-spaces */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/ban-types */
 
-import React, { useState, useContext, useEffect, useRef, createContext, memo, lazy, Suspense, Fragment } from 'react'
-import { HashRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom'
-import { remote } from 'electron'
+import React, { useState, useContext, useRef, createContext, memo, lazy, Suspense } from 'react'
+import { HashRouter as Router, Switch, Route } from 'react-router-dom'
 import styled from 'styled-components'
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import { Settings } from './Context'
 
 import Header from './Header'
 import Sidebar from './Sidebar'
+import TabSpace from './TabSpace'
 import Loading from './Loading'
 
 const Welcome = lazy(() => import('../pages/Welcome'))
@@ -24,50 +18,12 @@ const Profile = lazy(() => import('../pages/Profile'))
 const Staff = lazy(() => import('../pages/Staff/Index'))
 
 const HEADER_HEIGHT = 50
-const SIDEBAR_WIDTH = 250
+export const SIDEBAR_WIDTH = 250
 const TABSPACE_HEIGHT = 40
-const TAB_WIDTH = 200
 const TITLE_HEIGHT = 50
 
 export const TabControl = createContext<Function | null>(null)
-
-const TabSpace = ({ view, setView, tabs, setTabs, maxTabs, setMaxTabs }: TabSpaceProps): JSX.Element => {
-  const history = useHistory() // maybe use Hash History instead??
-  const { localize } = useContext(Settings)!
-
-  useEffect(() => {
-    window.addEventListener('resize', () => {
-      const currentWidth = remote.getCurrentWindow().getBounds().width
-      const tabSpaceWidth = currentWidth - SIDEBAR_WIDTH - 50
-      setMaxTabs(Math.floor(tabSpaceWidth / TAB_WIDTH))
-    })
-  }, [])
-
-  useEffect(() => {
-    if (tabs.length > maxTabs) setTabs(tabs.slice(tabs.length - maxTabs))
-  }, [maxTabs])
-  
-  return (
-    <StyledTabSpace>
-      {tabs.map(tab =>
-        <Tab key={tab} selected={tab === view}
-          to={'/' + tab} onClick={() => setView(tab)}>
-          {localize(tab)}
-          <FontAwesomeIcon icon={faTimes}
-            onClick={e => {
-              e.stopPropagation()
-              setTabs(tabs.filter(tab0 => tab0 !== tab))
-              if (tab === view) {
-                setView(null)
-                history.push('/') // BUG: only routes to the page for a second then immediately blinks back into the previous page.
-              }
-            }} />
-        </Tab>
-      )}
-      <TabTip>{tabs.length}/{maxTabs}</TabTip>
-    </StyledTabSpace>
-  )
-}
+export const ScrollControl = createContext<Function | null>(null)
 
 // Pseudo HOC for determining welcome screen according to account access level.
 const WelcomeOrDashboard = (): JSX.Element => {
@@ -77,6 +33,7 @@ const WelcomeOrDashboard = (): JSX.Element => {
 
 const Layout = (): JSX.Element => {
   const { localize } = useContext(Settings)!
+  const contentElement = useRef<HTMLElement>(null)
 
   // Lifting state up from TabSpace component
   const [view, setView] = useState<string | null>(null)
@@ -89,6 +46,10 @@ const Layout = (): JSX.Element => {
       else setTabs([...tabs, linkPressed])
     }
     setView(linkPressed)
+  }
+
+  function scrollToTop () {
+    contentElement.current!.scrollTop = 0
   }
 
   return (
@@ -108,15 +69,17 @@ const Layout = (): JSX.Element => {
             maxTabs={maxTabs}
             setMaxTabs={setMaxTabs} />
           <TitleSpace>{localize(view)}</TitleSpace>
-          <Content>
-            <Suspense fallback={<Loading />}>
-              <Switch>
-                <Route path="/" exact component={ WelcomeOrDashboard } />
-                <Route path="/dashboard" component={ Dashboard } />
-                <Route path="/profile" component={ Profile } />
-                <Route path="/staff" component={ Staff } />
-              </Switch>
-            </Suspense>
+          <Content ref={contentElement}>
+            <ScrollControl.Provider value={scrollToTop} >
+              <Suspense fallback={<Loading />}>
+                <Switch>
+                  <Route path="/" exact component={ WelcomeOrDashboard } />
+                  <Route path="/dashboard" component={ Dashboard } />
+                  <Route path="/profile" component={ Profile } />
+                  <Route path="/staff" component={ Staff } />
+                </Switch>
+              </Suspense>
+            </ScrollControl.Provider>
           </Content>
         </Body>
       </StyledLayout>
@@ -153,50 +116,6 @@ const Body = styled.section`
   overflow: hidden;
 `
 
-const StyledTabSpace = styled.div`
-  background: none;
-  display: flex;
-  align-items: flex-end;
-  padding-left: 20px;
-  overflow-x: hidden;
-  position: relative;
-`
-
-const TabTip = styled.div`
-  color: ${({ theme }) => theme.fgWeak};
-  font-size: 14px;
-  position: absolute;
-  right: 10px;
-  bottom: 2px;
-`
-
-const Tab = styled(Link)<TabProps>`
-  background-color: ${({ theme, selected }) => selected ? theme.bg : theme.bgDilute};
-  color: ${({ theme, selected }) => selected ? theme.fgStrong : theme.fgMid};
-  width: ${TAB_WIDTH}px;
-  padding: ${({ selected }) => selected ? 8 : 6}px 10px;
-  font-size: 11px;
-  text-decoration: none;
-  position: relative;
-
-  border-top: 1px solid ${({ theme }) => theme.fgWeak};
-  border-left: 1px solid ${({ theme }) => theme.fgWeak};
-  border-right: 1px solid ${({ theme }) => theme.fgWeak};
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-
-  > svg {
-    position: absolute;
-    top: ${({ selected }) => selected ? 10 : 8}px;
-    right: 10px;
-
-    &:hover {
-      color: ${({ theme }) => theme.accent};
-      transform: scale(1.25);
-    }
-  }
-`
-
 const TitleSpace = styled.div`
   background-color: ${({ theme }) => theme.bg};
   color: ${({ theme }) => theme.fgStrong};
@@ -211,17 +130,5 @@ const TitleSpace = styled.div`
 const Content = styled.section`
   background-color: ${({ theme }) => theme.bgDilute};
   overflow-y: scroll;
+  scroll-behavior: smooth;
 `
-
-interface TabSpaceProps {
-  view: string | null
-  setView: React.Dispatch<React.SetStateAction<string | null>> 
-  tabs: Array<string>
-  setTabs: React.Dispatch<React.SetStateAction<Array<string>>>
-  maxTabs: number
-  setMaxTabs: React.Dispatch<React.SetStateAction<number>>
-}
-
-interface TabProps {
-  selected: boolean
-}

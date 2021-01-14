@@ -1,14 +1,28 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import styled from 'styled-components'
 
+import { ScrollControl } from './Layout'
+
 const Form = ({ FormFragment, returnFunction, initialData, queryOnClick }: FormProps): JSX.Element => {
+  const scrollToTop = useContext(ScrollControl)!
+
   const [formData, setFormData] = useState<Array<string>>(initialData || [])
-  const [onSubmit, setOnSubmit] = useState<() => void>()
+
+  const [onSubmit, setOnSubmit] = useState<() => 'ok' | Array<string>>()
+  const [errorMessages, setErrorMessages] = useState<Array<string> | null>(null)
 
   function handleSave () {
-    if (onSubmit) onSubmit()
+    if (onSubmit) {
+      const error = onSubmit()
+      if (error === 'ok') setErrorMessages(null)
+      else {
+        setErrorMessages(error)
+        scrollToTop()
+        return
+      }
+    }
     queryOnClick!(formData)
     returnFunction()
   }
@@ -16,6 +30,11 @@ const Form = ({ FormFragment, returnFunction, initialData, queryOnClick }: FormP
   return (
     <StyledFormArea editable={queryOnClick !== undefined}>
       <div>
+        {errorMessages &&
+          <StyledError>
+            {errorMessages.map((errorMessage, i) => <li key={i}>{errorMessage}</li>)}
+          </StyledError>
+        }
         <FormFragment // All form elements should reflect the formData state.
           formData={formData}
           setFormData={setFormData}
@@ -114,6 +133,16 @@ const StyledFormArea = styled.div<{ editable: boolean }>`
   }
 `
 
+const StyledError = styled.ul`
+  color: ${({ theme }) => theme.red};
+  border: 1px solid ${({ theme }) => theme.red};
+  border-radius: 5px;
+  padding: 10px 40px;
+  margin-top: 0;
+  margin-bottom: 30px;
+  font-size: 13px;
+`
+
 interface FormProps {
   FormFragment: React.FunctionComponent<FormFragmentProps>
   returnFunction: () => void
@@ -124,5 +153,5 @@ interface FormProps {
 export interface FormFragmentProps {
   formData: Array<string>
   setFormData: React.Dispatch<React.SetStateAction<string[]>>
-  setOnSubmit: React.Dispatch<React.SetStateAction<(() => void) | undefined>>
+  setOnSubmit: React.Dispatch<React.SetStateAction<(() => Array<string> | 'ok') | undefined>>
 }

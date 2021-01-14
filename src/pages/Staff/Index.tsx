@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import React from 'react'
 
 import Template from '../../components/ComplexTemplate'
@@ -6,39 +7,26 @@ import Row from './Row'
 import Filter from './Filter'
 import Form from './Form'
 
+const tableColumnNames = ['Staff ID', 'Full Name', 'Job', 'Phone Number', 'Status']
+const tableElements = [`staffid`, `staffname`, `groupname`, `phonenum`, `status`]
+const tableQueryArgs = 'LEFT JOIN `staffgroup` ON `staff`.`groupcode` = `staffgroup`.`stfgrcode`'
+
+const formElements = [
+  'profilepic', 'staffid', 'pwd', 'level', 'groupcode', 'staffname',
+  'gender', 'phonenum', 'placeofbirth', 'dateofbirth', 'status', 'dateofemployment',
+  'address1', 'district', 'city', 'salary', 'ot/hr', 'foodallowance', 'bonus', 'dilligencebonus'
+]
+
 const Staff = (): JSX.Element => {
   return (
     <Template
-      id='staff'
+      tableName='staff'
       primaryKey='staffid'
       searchBy='staffname'
-      columnNames={['Staff ID', 'Full Name', 'Job', 'Phone Number', 'Status']}
-      tableQuery={'\
-        SELECT `staffid`, `staffname`, `groupname`, `phonenum`, `status` \
-        FROM `staff` \
-        LEFT JOIN `staffgroup` \
-        ON `staff`.`groupcode` = `staffgroup`.`stfgrcode`'
-      }
-      formQuery={'\
-        SELECT `profilepic`, `staffid`, `staffname`, `level`, `groupcode`, \
-          `address1`, `district`, `city`, `phonenum`, `gender`, `placeofbirth`, `dateofbirth`, \
-          `ot/hr`, `salary`, `foodallowance`, `bonus`, `dilligencebonus`, `status`, `dateofemployment` \
-        FROM `staff` \
-        WHERE `staffid` = ?'
-      }
-      insertQuery={'\
-        INSERT INTO `staff` \
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-      } // TODO: write the update query
-      updateQuery={'\
-        UPDATE `staff` \
-        SET `staffid` = ?, `staffname` = ?. `groupcode` = ? \
-        WHERE `staffid` = ?'
-      }
-      deleteQuery={'\
-        DELETE FROM `staff` \
-        WHERE `staffid` = ?'
-      }
+      columnNames={tableColumnNames}
+      tableElements={tableElements}
+      tableQueryArgs={tableQueryArgs}
+      formElements={formElements}
       RowComponent={Row}
       FormComponent={Form}
       FilterComponent={Filter} />

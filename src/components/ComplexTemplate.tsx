@@ -7,13 +7,18 @@ import { ipcRenderer, remote } from 'electron'
 import Table, { FilterFragmentProps } from './ComplexTable'
 import Form, { FormFragmentProps } from './Form'
 
+import { generateWideQuery, generateQueries } from '../utils/generateQueries'
+
 const { dialog } = remote
 
 const Template = ({
-  id, columnNames,
-  tableQuery, formQuery, insertQuery, updateQuery, deleteQuery,
+  tableName, columnNames,
+  tableElements, tableQueryArgs, formElements,
   RowComponent, FormComponent, primaryKey, searchBy, FilterComponent
 }: TemplateProps): JSX.Element => {
+
+  const tableQuery = useRef(generateWideQuery(tableName, tableElements, tableQueryArgs))
+  const formQuery = useRef(generateQueries(tableName, primaryKey, formElements))
 
   const [mode, setMode] = useState<Mode>('Table')
   const selected = useRef<string>()
@@ -25,21 +30,21 @@ const Template = ({
           <Form
             FormFragment={FormComponent}
             returnFunction={() => setMode('Table')}
-            queryOnClick={formData => ipcRenderer.send('query', insertQuery, formData)} />
+            queryOnClick={formData => ipcRenderer.send('query', formQuery.current.insert, formData)} />
         )
       case 'View':
         return (
           <Form
             FormFragment={FormComponent}
             returnFunction={() => setMode('Table')}
-            initialData={Object.values(ipcRenderer.sendSync('querySync', formQuery, [selected.current])[0])} />
+            initialData={Object.values(ipcRenderer.sendSync('querySync', formQuery.current.select, [selected.current])[0])} />
         )
       case 'Edit':
         return (
           <Form
             FormFragment={FormComponent}
             returnFunction={() => setMode('Table')}
-            initialData={Object.values(ipcRenderer.sendSync('querySync', formQuery, [selected.current])[0])}
+            initialData={Object.values(ipcRenderer.sendSync('querySync', formQuery.current.select, [selected.current])[0])}
             queryOnClick={formData => {
               dialog.showMessageBox({
                 title: 'Update Record',
@@ -48,7 +53,7 @@ const Template = ({
               })
                 .then(({ response }) => {
                   if (response === 0) {
-                    ipcRenderer.send('query', updateQuery, [...formData, selected.current])
+                    ipcRenderer.send('query', formQuery.current.update, [...formData, selected.current])
                   }
                 })
             }} />
@@ -56,14 +61,14 @@ const Template = ({
       default:
         return (
           <Table
-            id={id}
+            id={tableName}
             columnNames={columnNames}
-            tableQuery={tableQuery}
+            tableQuery={tableQuery.current}
             RowFragment={RowComponent}
             primaryKey={primaryKey}
             searchBy={searchBy}
             FilterFragment={FilterComponent}
-            deleteQuery={deleteQuery}
+            deleteQuery={formQuery.current.delete}
             toAddPage={() => setMode('Add')}
             toViewPage={primaryKeyValue => {
               selected.current = primaryKeyValue
@@ -83,13 +88,11 @@ export default Template
 type Mode = 'Table' | 'Add' | 'View' | 'Edit'
 
 interface TemplateProps {
-  id: string
+  tableName: string
   columnNames: Array<string>
-  tableQuery: string
-  formQuery: string
-  insertQuery: string
-  updateQuery: string
-  deleteQuery: string
+  tableElements: Array<string>
+  tableQueryArgs?: string
+  formElements: Array<string>
   RowComponent: React.FunctionComponent<{ row: never }>
   FormComponent: React.FunctionComponent<FormFragmentProps>
   searchBy: string

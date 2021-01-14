@@ -14,17 +14,44 @@ const Form = ({ formData, setFormData, setOnSubmit }: FormFragmentProps): JSX.El
   function onSubmit () {
     setOnSubmit(() =>
       () => {
+        // Form validation
+        const errors: Array<string> = []
+        // TODO: check for required fields here
+        if (passwordRef.current!.value !== passwordRef2.current!.value) errors.push('Passwords do not match.')
+        if (errors.length > 0) return errors
+
+        // Setting data for submission
         setFormData([
-          // TODO
+          // TODO: profile pic blob here
           staffIdRef.current!.value,
-          firstNameRef.current!.value,
-          lastNameRef.current!.value
+          passwordRef.current!.value, // TODO: encrypt this
+          accessLevelRef.current!.value, // number
+
+          staffGroupRef.current!.value, // number
+          `${firstNameRef.current!.value} ${lastNameRef.current!.value}`,
+          genderRef.current!.value, // number
+          phoneNumRef.current!.value,
+          birthPlaceRef.current!.value,
+          birthdayRef.current!.value, // date
+          statusRef.current!.value, // number
+          employmentDateRef.current!.value, // date
+
+          addressRef.current!.value,
+          districtRef.current!.value,
+          cityRef.current!.value,
+
+          salaryRef.current!.value,
+          overtimePayRef.current!.value,
+          mealAllowanceRef.current!.value,
+          bonusPayRef.current!.value,
+          extraBonusPayRef.current!.value
         ])
+        return 'ok' as const
       }
     )
   }
 
-  const staffName = getFirstLastName(formData[2])
+  const staffName = getFirstLastName(formData[5])
 
   const [staffGroup, setStaffGroup] = useState<Array<StaffGroup> | null>(null)
   function fetchGroups () {
@@ -78,26 +105,26 @@ const Form = ({ formData, setFormData, setOnSubmit }: FormFragmentProps): JSX.El
         defaultValue={staffName.firstName}
         defaultValue2={staffName.lastName}
         placeholder='First Name' placeholder2='Last Name' />
-      <ComboBox label="Gender" Ref={genderRef} defaultValue={formData[9]}
+      <ComboBox label="Gender" Ref={genderRef} defaultValue={formData[6]}
         options={[[0, 'Male'], [1, 'Female']]} />
-      <Input label="Phone Number" Ref={phoneNumRef} defaultValue={formData[8]} placeholder='e.g. +6281234567890' />
-      <Input label="Place of Birth" Ref={birthPlaceRef} defaultValue={formData[10]} />
-      <Input label="Date of Birth" Ref={birthdayRef} defaultValue={formData[11]} />
-      <ComboBox label="Status" Ref={statusRef} defaultValue={formData[17]}
+      <Input label="Phone Number" Ref={phoneNumRef} defaultValue={formData[7]} placeholder='e.g. +6281234567890' />
+      <Input label="Place of Birth" Ref={birthPlaceRef} defaultValue={formData[8]} />
+      <Input label="Date of Birth" Ref={birthdayRef} defaultValue={formData[9]} />
+      <ComboBox label="Status" Ref={statusRef} defaultValue={formData[10]}
         options={[[1, 'Active'], [0, 'Inactive']]} />
-      <Input label="Date of Employment" Ref={employmentDateRef} defaultValue={formData[18]} />
+      <Input label="Date of Employment" Ref={employmentDateRef} defaultValue={formData[11]} />
       <hr />
       <Heading header="Address" description="Where the dude or gal lives" />
-      <Input label="Address" Ref={addressRef} defaultValue={formData[5]} placeholder="e.g. Katamaran Indah, Blok ABC No.123" />
-      <Input label="District" Ref={districtRef} defaultValue={formData[6]} placeholder="e.g. Pantai Indah Kapuk" />
-      <Input label="City" Ref={cityRef} defaultValue={formData[7]} placeholder="e.g. Jakarta Utara" />
+      <Input label="Address" Ref={addressRef} defaultValue={formData[12]} placeholder="e.g. Katamaran Indah, Blok ABC No.123" />
+      <Input label="District" Ref={districtRef} defaultValue={formData[13]} placeholder="e.g. Pantai Indah Kapuk" />
+      <Input label="City" Ref={cityRef} defaultValue={formData[14]} placeholder="e.g. Jakarta Utara" />
       <hr />
       <Heading header="Salary and Wages" description="The staff's periodical pay amount." />
-      <Input label="Salary" Ref={salaryRef} defaultValue={formData[13]} placeholder='e.g. 5,000,000' />
-      <Input label="Overtime Pay" Ref={overtimePayRef} defaultValue={formData[12]} />
-      <Input label="Meal Allowance" Ref={mealAllowanceRef} defaultValue={formData[14]} />
-      <Input label="Bonus Pay" Ref={bonusPayRef} defaultValue={formData[15]} />
-      <Input label="Extra Bonus Pay" Ref={extraBonusPayRef} defaultValue={formData[16]} />
+      <Input label="Salary" Ref={salaryRef} defaultValue={formData[15]} placeholder='e.g. 5,000,000' />
+      <Input label="Overtime Pay" Ref={overtimePayRef} defaultValue={formData[16]} />
+      <Input label="Meal Allowance" Ref={mealAllowanceRef} defaultValue={formData[17]} />
+      <Input label="Bonus Pay" Ref={bonusPayRef} defaultValue={formData[18]} />
+      <Input label="Extra Bonus Pay" Ref={extraBonusPayRef} defaultValue={formData[19]} />
     </Fragment>
   )
 }
