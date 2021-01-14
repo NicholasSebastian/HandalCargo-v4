@@ -2,7 +2,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { MutableRefObject, useEffect } from 'react'
+import { ipcRenderer } from 'electron'
 import styled from 'styled-components'
+
+import bufferToBlob from '../utils/bufferToBlob'
 
 const LABEL_WIDTH = 160
 
@@ -150,5 +153,41 @@ export const ComboBox = (props: ComboBoxProps): JSX.Element => {
 const ComboBoxStyles = styled.div`
   > label {
     width: ${LABEL_WIDTH}px;
+  }
+`
+
+interface ImagePickerProps {
+  label: string
+  Ref: MutableRefObject<any>
+}
+
+export const ImagePicker = (props: ImagePickerProps): JSX.Element => {
+  function fetchImage () {
+    ipcRenderer.once('imageRetrieved', (event, buffer, extension) => {
+      const blob = bufferToBlob(buffer, extension)
+      props.Ref.current!.src = URL.createObjectURL(blob)
+    })
+    ipcRenderer.send('retrieveImage')
+  }
+
+  return (
+    <ImagePickerStyles>
+      <label>{props.label}</label>
+      <img ref={props.Ref} onClick={fetchImage} />
+    </ImagePickerStyles>
+  )
+}
+
+const ImagePickerStyles = styled.div`
+  display: flex;
+  align-items: center;
+
+  > label {
+    width: ${LABEL_WIDTH}px;
+  }
+
+  > img {
+    width: 150px;
+    height: 150px;
   }
 `

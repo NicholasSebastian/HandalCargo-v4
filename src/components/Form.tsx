@@ -92,6 +92,12 @@ const StyledFormArea = styled.div<{ editable: boolean }>`
       }
     }
 
+    img {
+      &:hover {
+        cursor: ${({ editable }) => editable ? 'pointer' : 'default'};
+      }
+    }
+
     input[type="date"] {
       &::-webkit-inner-spin-button { display: none; }
 

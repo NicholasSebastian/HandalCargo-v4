@@ -40,10 +40,9 @@ class Window {
 
   public onLogin (): void {
     this.window?.setSize(windowSize.width, windowSize.height)
-    this.window?.setMinimumSize(windowSize.minWidth, windowSize.minHeight) // this is bugged.
+    this.window?.setMinimumSize(windowSize.minWidth, windowSize.minHeight) // this is bugged. min size is 0, 0 for some reason wtf.
     this.window?.setResizable(true)
     this.window?.center()
-    console.log(this.window?.getMinimumSize()) // why tf is this 0, 0.
   }
 
   public onLogout (): void {

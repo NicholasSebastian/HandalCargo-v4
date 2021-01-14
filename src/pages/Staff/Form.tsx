@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, Fragment } from 'react'
 import { ipcRenderer } from 'electron'
 
 import { FormFragmentProps } from '../../components/Form'
-import { Heading, Input, DoubleInput, ComboBox, DatePicker } from '../../components/FormComponents'
+import { Heading, Input, DoubleInput, ComboBox, DatePicker, ImagePicker } from '../../components/FormComponents'
 
 const Form = ({ formData, setFormData, setOnSubmit }: FormFragmentProps): JSX.Element => {
   useEffect(() => {
@@ -27,7 +27,7 @@ const Form = ({ formData, setFormData, setOnSubmit }: FormFragmentProps): JSX.El
         const encryptedPassword = passwordRef.current!.value // TODO: encrypt password
 
         setFormData([
-          // TODO: profile pic blob here
+          '', // TODO: profile pic blob here
           staffIdRef.current!.value,
           encryptedPassword,
           accessLevelRef.current!.value,
@@ -66,6 +66,7 @@ const Form = ({ formData, setFormData, setOnSubmit }: FormFragmentProps): JSX.El
   }
 
   // Form UI Elements
+  const profilePicRef = useRef<HTMLImageElement>(null)
   const staffIdRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
   const passwordRef2 = useRef<HTMLInputElement>(null)
@@ -103,6 +104,7 @@ const Form = ({ formData, setFormData, setOnSubmit }: FormFragmentProps): JSX.El
         options={[[1, 'Employee'], [2, 'Manager'], [3, 'Master']]} />
       <hr />
       <Heading header="Personal Information" description="idk what the description should be" />
+      <ImagePicker label="Profile Picture" Ref={profilePicRef} />
       <ComboBox label="Staff Group" Ref={staffGroupRef} defaultValue={formData[4]}
         options={staffGroup ? staffGroup.map(object => Object.values(object) as [string, string]) : null} />
       <DoubleInput label="Full Name" Ref={firstNameRef} Ref2={lastNameRef}
