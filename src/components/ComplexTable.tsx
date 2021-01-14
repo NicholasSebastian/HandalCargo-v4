@@ -242,6 +242,24 @@ const StyledPanel = styled.div`
         margin: 0;
         font-size: 16px;
       }
+
+      > h3 {
+        color: ${({ theme }) => theme.fgMid};
+        font-size: 14px;
+      }
+
+      > div {
+        color: ${({ theme }) => theme.fgMid};
+        display: flex;
+        align-items: center;
+        padding: 2px 0;
+        font-size: 13px;
+
+        > input[type="checkbox"] {
+          margin: 0; 
+          margin-right: 5px;
+        }
+      }
     }
   }
 `

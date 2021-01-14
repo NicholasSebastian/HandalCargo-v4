@@ -4,7 +4,7 @@
 import React, { MutableRefObject, useEffect } from 'react'
 import styled from 'styled-components'
 
-const LABEL_WIDTH = 140
+const LABEL_WIDTH = 160
 
 interface HeadingProps {
   header: string
@@ -99,6 +99,30 @@ const DoubleInputStyles = styled.div`
   }
   > input:first-of-type {
     margin-right: 10px;
+  }
+`
+
+interface DatePickerProps {
+  label: string
+  Ref: MutableRefObject<any>
+  defaultValue: Date
+}
+
+export const DatePicker = (props: DatePickerProps): JSX.Element => {
+  return (
+    <DatePickerStyles>
+      <label>{props.label}</label>
+      <input
+        type="date"
+        ref={props.Ref}
+        defaultValue={props.defaultValue?.toISOString().substr(0, 10)} />
+    </DatePickerStyles>
+  )
+}
+
+const DatePickerStyles = styled.div`
+  > label {
+    width: ${LABEL_WIDTH}px;
   }
 `
 

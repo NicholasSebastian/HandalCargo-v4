@@ -23,15 +23,15 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
     - [x] Delete functionality.
     - [x] Search and filter.
     - [x] Forms
-      - [ ] Form Validation.
-      - [ ] Add functionality.
+      - [x] Form Validation.
+      - [x] Add functionality.
       - [x] View functionality.
-      - [ ] Edit functionality.
-      - [ ] Form Components
+      - [x] Edit functionality.
+      - [x] Form Components
         - [x] Headers
         - [x] Text input boxes
         - [x] ComboBox
-        - [ ] Date Picker
+        - [x] Date Picker
   - [ ] Simple Template for 'References' pages and 'Staff Groups' page.
     - [ ] List
     - [ ] Add, Modify, Delete.
@@ -81,6 +81,10 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
   - Alleviate blinks between page transitions:
     - Performance improvements?
     - Smoother transitions?
+- [ ] Custom styled components??
+  - [ ] Styled combobox
+  - [ ] Styled date picker
+  - [ ] Styled checkbox
 
 ## Currently known problems to be fixed
 

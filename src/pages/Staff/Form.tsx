@@ -2,39 +2,44 @@
 
 import React, { useState, useEffect, useRef, Fragment } from 'react'
 import { ipcRenderer } from 'electron'
+
 import { FormFragmentProps } from '../../components/Form'
-import { Heading, Input, DoubleInput, ComboBox } from '../../components/FormComponents'
+import { Heading, Input, DoubleInput, ComboBox, DatePicker } from '../../components/FormComponents'
 
 const Form = ({ formData, setFormData, setOnSubmit }: FormFragmentProps): JSX.Element => {
   useEffect(() => {
-    onSubmit()
+    configureSubmit()
     fetchGroups()
   }, [])
 
-  function onSubmit () {
+  // Prepare the data to be sent to the database.
+  function configureSubmit () {
     setOnSubmit(() =>
       () => {
-        // Form validation
         const errors: Array<string> = []
-        // TODO: check for required fields here
+        if (staffIdRef.current!.value.length === 0) errors.push('Staff ID cannot be blank.')
+        if (firstNameRef.current!.value.length + lastNameRef.current!.value.length === 0) errors.push('Name cannot be blank.')
+        if (passwordRef.current!.value.length === 0 || passwordRef2.current!.value.length === 0) errors.push('Passwords cannot be blank.')
         if (passwordRef.current!.value !== passwordRef2.current!.value) errors.push('Passwords do not match.')
         if (errors.length > 0) return errors
 
-        // Setting data for submission
+        const fullName = `${firstNameRef.current!.value} ${lastNameRef.current!.value}`
+        const encryptedPassword = passwordRef.current!.value // TODO: encrypt password
+
         setFormData([
           // TODO: profile pic blob here
           staffIdRef.current!.value,
-          passwordRef.current!.value, // TODO: encrypt this
-          accessLevelRef.current!.value, // number
+          encryptedPassword,
+          accessLevelRef.current!.value,
 
-          staffGroupRef.current!.value, // number
-          `${firstNameRef.current!.value} ${lastNameRef.current!.value}`,
-          genderRef.current!.value, // number
+          staffGroupRef.current!.value,
+          fullName,
+          genderRef.current!.value,
           phoneNumRef.current!.value,
           birthPlaceRef.current!.value,
-          birthdayRef.current!.value, // date
-          statusRef.current!.value, // number
-          employmentDateRef.current!.value, // date
+          birthdayRef.current!.value,
+          statusRef.current!.value,
+          employmentDateRef.current!.value,
 
           addressRef.current!.value,
           districtRef.current!.value,
@@ -51,6 +56,7 @@ const Form = ({ formData, setFormData, setOnSubmit }: FormFragmentProps): JSX.El
     )
   }
 
+  // Prepare data for the Form UI
   const staffName = getFirstLastName(formData[5])
 
   const [staffGroup, setStaffGroup] = useState<Array<StaffGroup> | null>(null)
@@ -59,6 +65,7 @@ const Form = ({ formData, setFormData, setOnSubmit }: FormFragmentProps): JSX.El
     ipcRenderer.send('query', 'SELECT `stfgrcode`, `groupname` FROM `staffgroup`', [], 'staffFormQuery')
   }
 
+  // Form UI Elements
   const staffIdRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
   const passwordRef2 = useRef<HTMLInputElement>(null)
@@ -84,9 +91,6 @@ const Form = ({ formData, setFormData, setOnSubmit }: FormFragmentProps): JSX.El
   const bonusPayRef = useRef<HTMLInputElement>(null)
   const extraBonusPayRef = useRef<HTMLInputElement>(null)
 
-  // TODO: Use a date picker component for date values instead of text input.
-  // TODO: Format date values to be displayed in a more user friendly way.
-
   // TODO: Images. Pick image from file system, convert to BLOB/Binary64, store in DB, vice versa.
   return (
     <Fragment>
@@ -109,10 +113,10 @@ const Form = ({ formData, setFormData, setOnSubmit }: FormFragmentProps): JSX.El
         options={[[0, 'Male'], [1, 'Female']]} />
       <Input label="Phone Number" Ref={phoneNumRef} defaultValue={formData[7]} placeholder='e.g. +6281234567890' />
       <Input label="Place of Birth" Ref={birthPlaceRef} defaultValue={formData[8]} />
-      <Input label="Date of Birth" Ref={birthdayRef} defaultValue={formData[9]} />
+      <DatePicker label="Date of Birth" Ref={birthdayRef} defaultValue={formData[9] as unknown as Date} />
       <ComboBox label="Status" Ref={statusRef} defaultValue={formData[10]}
         options={[[1, 'Active'], [0, 'Inactive']]} />
-      <Input label="Date of Employment" Ref={employmentDateRef} defaultValue={formData[11]} />
+      <DatePicker label="Date of Employment" Ref={employmentDateRef} defaultValue={formData[11] as unknown as Date} />
       <hr />
       <Heading header="Address" description="Where the dude or gal lives" />
       <Input label="Address" Ref={addressRef} defaultValue={formData[12]} placeholder="e.g. Katamaran Indah, Blok ABC No.123" />

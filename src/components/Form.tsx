@@ -39,8 +39,10 @@ const Form = ({ FormFragment, returnFunction, initialData, queryOnClick }: FormP
           formData={formData}
           setFormData={setFormData}
           setOnSubmit={setOnSubmit} />
-        {queryOnClick && <button onClick={handleSave}>Save</button>}
-        <button onClick={returnFunction}>Back</button>
+        <div>
+          {queryOnClick && <button onClick={handleSave}>Save</button>}
+          <button onClick={returnFunction}>Back</button>
+        </div>
       </div>
     </StyledFormArea>
   )
@@ -82,10 +84,23 @@ const StyledFormArea = styled.div<{ editable: boolean }>`
     }
 
     select {
+      color: ${({ theme }) => theme.fgStrong};
       appearance: ${({ editable }) => editable ? 'auto' : 'none'};
 
       &:hover {
         cursor: ${({ editable }) => editable ? 'pointer' : 'default'};
+      }
+    }
+
+    input[type="date"] {
+      &::-webkit-inner-spin-button { display: none; }
+
+      &:hover {
+        cursor: text;
+      }
+
+      &::-webkit-calendar-picker-indicator:hover { 
+        cursor: pointer; 
       }
     }
 
@@ -111,23 +126,27 @@ const StyledFormArea = styled.div<{ editable: boolean }>`
       margin: 25px 0;
     }
 
-    > div {
+    > div:not(:last-child) {
       margin-bottom: 15px;
     }
 
-    > button {
-      background-color: ${({ theme }) => theme.accent};
-      color: ${({ theme }) => theme.bg};
-      border: none;
-      border-radius: 5px;
-      width: 70px;
-      padding: 10px 0;
-      margin-top: 20px;
-      margin-right: 10px;
+    > div:last-child {
+      text-align: right;
 
-      &:hover {
-        cursor: pointer;
-        // add hover effects here
+      > button {
+        background-color: ${({ theme }) => theme.accent};
+        color: ${({ theme }) => theme.bg};
+        border: none;
+        border-radius: 5px;
+        width: 70px;
+        padding: 10px 0;
+        margin-top: 20px;
+        margin-left: 10px;
+
+        &:hover {
+          cursor: pointer;
+          // add hover effects here
+        }
       }
     }
   }
