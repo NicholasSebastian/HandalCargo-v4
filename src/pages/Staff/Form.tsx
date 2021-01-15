@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import React, { useState, useEffect, useRef, Fragment } from 'react'
@@ -6,7 +7,9 @@ import { ipcRenderer } from 'electron'
 import { FormFragmentProps } from '../../components/Form'
 import { Heading, Input, DoubleInput, ComboBox, DatePicker, ImagePicker } from '../../components/FormComponents'
 
-const Form = ({ formData, setFormData, setOnSubmit }: FormFragmentProps): JSX.Element => {
+import retrieveImage from '../../functions/getImageFromFile'
+
+const Form = ({ formData, setOnSubmit }: FormFragmentProps): JSX.Element => {
   useEffect(() => {
     configureSubmit()
     fetchGroups()
@@ -16,48 +19,58 @@ const Form = ({ formData, setFormData, setOnSubmit }: FormFragmentProps): JSX.El
   function configureSubmit () {
     setOnSubmit(() =>
       () => {
+        // Form validation
         const errors: Array<string> = []
         if (staffIdRef.current!.value.length === 0) errors.push('Staff ID cannot be blank.')
         if (firstNameRef.current!.value.length + lastNameRef.current!.value.length === 0) errors.push('Name cannot be blank.')
         if (passwordRef.current!.value.length === 0 || passwordRef2.current!.value.length === 0) errors.push('Passwords cannot be blank.')
         if (passwordRef.current!.value !== passwordRef2.current!.value) errors.push('Passwords do not match.')
-        if (errors.length > 0) return errors
 
+        if (errors.length > 0) {
+          return {
+            code: 'err',
+            data: errors
+          }
+        }
+
+        // Data submission
         const fullName = `${firstNameRef.current!.value} ${lastNameRef.current!.value}`
         const encryptedPassword = passwordRef.current!.value // TODO: encrypt password
 
-        setFormData([
-          '', // TODO: profile pic blob here
-          staffIdRef.current!.value,
-          encryptedPassword,
-          accessLevelRef.current!.value,
+        return {
+          code: 'ok',
+          data: [
+            staffIdRef.current!.value,
+            encryptedPassword,
+            accessLevelRef.current!.value,
 
-          staffGroupRef.current!.value,
-          fullName,
-          genderRef.current!.value,
-          phoneNumRef.current!.value,
-          birthPlaceRef.current!.value,
-          birthdayRef.current!.value,
-          statusRef.current!.value,
-          employmentDateRef.current!.value,
+            imageBlobRef.current,
+            staffGroupRef.current!.value,
+            fullName,
+            genderRef.current!.value,
+            phoneNumRef.current!.value,
+            birthPlaceRef.current!.value,
+            birthdayRef.current!.value,
+            statusRef.current!.value,
+            employmentDateRef.current!.value,
 
-          addressRef.current!.value,
-          districtRef.current!.value,
-          cityRef.current!.value,
+            addressRef.current!.value,
+            districtRef.current!.value,
+            cityRef.current!.value,
 
-          salaryRef.current!.value,
-          overtimePayRef.current!.value,
-          mealAllowanceRef.current!.value,
-          bonusPayRef.current!.value,
-          extraBonusPayRef.current!.value
-        ])
-        return 'ok' as const
+            salaryRef.current!.value,
+            overtimePayRef.current!.value,
+            mealAllowanceRef.current!.value,
+            bonusPayRef.current!.value,
+            extraBonusPayRef.current!.value
+          ]
+        }
       }
     )
   }
 
   // Prepare data for the Form UI
-  const staffName = getFirstLastName(formData[5])
+  const staffName = getFirstLastName(formData[5] as string)
 
   const [staffGroup, setStaffGroup] = useState<Array<StaffGroup> | null>(null)
   function fetchGroups () {
@@ -65,12 +78,21 @@ const Form = ({ formData, setFormData, setOnSubmit }: FormFragmentProps): JSX.El
     ipcRenderer.send('query', 'SELECT `stfgrcode`, `groupname` FROM `staffgroup`', [], 'staffFormQuery')
   }
 
+  function handleImage () {
+    retrieveImage(imageBlob => {
+      imageBlobRef.current = imageBlob // TODO: figure out how to store BLOB in database.
+      profilePicRef.current!.src = URL.createObjectURL(imageBlob)
+    })
+  }
+
   // Form UI Elements
-  const profilePicRef = useRef<HTMLImageElement>(null)
   const staffIdRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
   const passwordRef2 = useRef<HTMLInputElement>(null)
   const accessLevelRef = useRef<HTMLSelectElement>(null)
+
+  const imageBlobRef = useRef<Blob | null>(null)
+  const profilePicRef = useRef<HTMLImageElement>(null)
 
   const staffGroupRef = useRef<HTMLSelectElement>(null)
   const firstNameRef = useRef<HTMLInputElement>(null)
@@ -92,27 +114,25 @@ const Form = ({ formData, setFormData, setOnSubmit }: FormFragmentProps): JSX.El
   const bonusPayRef = useRef<HTMLInputElement>(null)
   const extraBonusPayRef = useRef<HTMLInputElement>(null)
 
-  // TODO: Images. Pick image from file system, convert to BLOB/Binary64, store in DB, vice versa.
   return (
     <Fragment>
       <h1>Staff Details</h1>
       <Heading header="Account Details" description="uhhh your account stuff" />
-      <Input label="Staff ID" Ref={staffIdRef} defaultValue={formData[1]} placeholder='e.g. jacky123' />
-      <DoubleInput label="Password" Ref={passwordRef} Ref2={passwordRef2}
+      <Input label="Staff ID" Ref={staffIdRef} defaultValue={formData[0]} placeholder='e.g. jacky123' />
+      <DoubleInput label="Password" Ref={passwordRef} Ref2={passwordRef2} // TODO: default value for passwords
         placeholder="Password" placeholder2="Confirm Password" password={true} />
-      <ComboBox label="Access Level" Ref={accessLevelRef} defaultValue={formData[3]}
+      <ComboBox label="Access Level" Ref={accessLevelRef} defaultValue={formData[2]}
         options={[[1, 'Employee'], [2, 'Manager'], [3, 'Master']]} />
       <hr />
       <Heading header="Personal Information" description="idk what the description should be" />
-      <ImagePicker label="Profile Picture" Ref={profilePicRef} />
+      <ImagePicker label="Profile Picture" Ref={profilePicRef} defaultValue={formData[3] as unknown as Blob} OnClick={handleImage} />
       <ComboBox label="Staff Group" Ref={staffGroupRef} defaultValue={formData[4]}
         options={staffGroup ? staffGroup.map(object => Object.values(object) as [string, string]) : null} />
       <DoubleInput label="Full Name" Ref={firstNameRef} Ref2={lastNameRef}
         defaultValue={staffName.firstName}
         defaultValue2={staffName.lastName}
         placeholder='First Name' placeholder2='Last Name' />
-      <ComboBox label="Gender" Ref={genderRef} defaultValue={formData[6]}
-        options={[[0, 'Male'], [1, 'Female']]} />
+      <ComboBox label="Gender" Ref={genderRef} defaultValue={formData[6]} options={[[0, 'Male'], [1, 'Female']]} />
       <Input label="Phone Number" Ref={phoneNumRef} defaultValue={formData[7]} placeholder='e.g. +6281234567890' />
       <Input label="Place of Birth" Ref={birthPlaceRef} defaultValue={formData[8]} />
       <DatePicker label="Date of Birth" Ref={birthdayRef} defaultValue={formData[9] as unknown as Date} />

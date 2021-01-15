@@ -35,7 +35,7 @@ const Table = ({
     })
       .then(({ response }) => {
         if (response === 0) {
-          ipcRenderer.send('query', deleteQuery, [primaryKey])
+          ipcRenderer.send('queryNoReply', deleteQuery, [primaryKey])
           ipcRenderer.send('query', tableQuery, [], id)
         }
       })
@@ -57,8 +57,8 @@ const Table = ({
           <tbody>
             {data && filter(data)
               .filter(row => new RegExp('^' + search).test(row[searchBy]))
-              .map(row =>
-                <tr key={row} onClick={() => toViewPage(row[primaryKey])}>
+              .map((row) =>
+                <tr key={row[primaryKey]} onClick={() => toViewPage(row[primaryKey])}>
                   <RowFragment row={row} />
                   <button>
                     <FontAwesomeIcon icon={faEllipsisH} />

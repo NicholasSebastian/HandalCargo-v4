@@ -2,10 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { MutableRefObject, useEffect } from 'react'
-import { ipcRenderer } from 'electron'
 import styled from 'styled-components'
-
-import bufferToBlob from '../utils/bufferToBlob'
 
 const LABEL_WIDTH = 160
 
@@ -40,7 +37,7 @@ const HeadingStyles = styled.div`
 interface InputProps {
   label: string
   Ref: MutableRefObject<any>
-  defaultValue?: string
+  defaultValue?: unknown
   placeholder?: string
 }
 
@@ -51,7 +48,7 @@ export const Input = (props: InputProps): JSX.Element => {
       <input
         type='text'
         ref={props.Ref}
-        defaultValue={props.defaultValue}
+        defaultValue={props.defaultValue as string}
         placeholder={props.placeholder} />
     </InputStyles>
   )
@@ -69,8 +66,8 @@ interface DoubleInputProps {
   label: string
   Ref: MutableRefObject<any>
   Ref2: MutableRefObject<any>
-  defaultValue?: string
-  defaultValue2?: string
+  defaultValue?: unknown
+  defaultValue2?: unknown
   placeholder?: string
   placeholder2?: string
   password?: boolean
@@ -83,12 +80,12 @@ export const DoubleInput = (props: DoubleInputProps): JSX.Element => {
       <input
         type={props.password ? 'password' : 'text'}
         ref={props.Ref}
-        defaultValue={props.defaultValue}
+        defaultValue={props.defaultValue as string}
         placeholder={props.placeholder} />
       <input
         type={props.password ? 'password' : 'text'}
         ref={props.Ref2}
-        defaultValue={props.defaultValue2}
+        defaultValue={props.defaultValue2 as string}
         placeholder={props.placeholder2} />
     </DoubleInputStyles>
   )
@@ -133,11 +130,11 @@ interface ComboBoxProps {
   label: string
   Ref: MutableRefObject<any>
   options: Array<[string | number, string]> | null
-  defaultValue: string
+  defaultValue: unknown
 }
 
 export const ComboBox = (props: ComboBoxProps): JSX.Element => {
-  useEffect(() => { if (props.defaultValue) props.Ref.current.value = props.defaultValue }, [])
+  useEffect(() => { if (props.defaultValue) props.Ref.current.value = props.defaultValue }, [props.options])
   return (
     <ComboBoxStyles>
       <label>{props.label}</label>
@@ -159,21 +156,16 @@ const ComboBoxStyles = styled.div`
 interface ImagePickerProps {
   label: string
   Ref: MutableRefObject<any>
+  defaultValue: Blob
+  OnClick: () => void
 }
 
 export const ImagePicker = (props: ImagePickerProps): JSX.Element => {
-  function fetchImage () {
-    ipcRenderer.once('imageRetrieved', (event, buffer, extension) => {
-      const blob = bufferToBlob(buffer, extension)
-      props.Ref.current!.src = URL.createObjectURL(blob)
-    })
-    ipcRenderer.send('retrieveImage')
-  }
-
+  useEffect(() => { if (props.defaultValue) props.Ref.current!.src = URL.createObjectURL(props.defaultValue) }, [])
   return (
     <ImagePickerStyles>
       <label>{props.label}</label>
-      <img ref={props.Ref} onClick={fetchImage} />
+      <img ref={props.Ref} onClick={props.OnClick} />
     </ImagePickerStyles>
   )
 }

@@ -37,6 +37,15 @@ class Connection {
     }
   }
 
+  public queryNoReply (query: string, values: Array<string>): void {
+    if (this.connection?.isValid()) {
+      this.connection.query(query, values)
+        .catch(error => dialog.showErrorBox('Query failed', error.message))
+    } else {
+      Connection.handleConnectionError()
+    }
+  }
+
   public querySync (event: Electron.IpcMainEvent, query: string, values: Array<string>): void {
     if (this.connection?.isValid()) {
       this.connection.query(query, values)

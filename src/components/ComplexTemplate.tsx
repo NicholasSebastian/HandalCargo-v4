@@ -7,7 +7,7 @@ import { ipcRenderer, remote } from 'electron'
 import Table, { FilterFragmentProps } from './ComplexTable'
 import Form, { FormFragmentProps } from './Form'
 
-import { generateWideQuery, generateQueries } from '../utils/generateQueries'
+import { generateTableQuery, generateFormQueries } from '../functions/generateQueries'
 
 const { dialog } = remote
 
@@ -17,8 +17,8 @@ const Template = ({
   RowComponent, FormComponent, primaryKey, searchBy, FilterComponent
 }: TemplateProps): JSX.Element => {
 
-  const tableQuery = useRef(generateWideQuery(tableName, tableElements, tableQueryArgs))
-  const formQuery = useRef(generateQueries(tableName, primaryKey, formElements))
+  const tableQuery = useRef(generateTableQuery(tableName, tableElements, tableQueryArgs))
+  const formQuery = useRef(generateFormQueries(tableName, primaryKey, formElements))
 
   const [mode, setMode] = useState<Mode>('Table')
   const selected = useRef<string>()
@@ -30,7 +30,7 @@ const Template = ({
           <Form
             FormFragment={FormComponent}
             returnFunction={() => setMode('Table')}
-            queryOnClick={formData => ipcRenderer.send('query', formQuery.current.insert, formData)} />
+            queryOnClick={formData => ipcRenderer.send('queryNoReply', formQuery.current.insert, formData)} />
         )
       case 'View':
         return (
@@ -53,7 +53,8 @@ const Template = ({
               })
                 .then(({ response }) => {
                   if (response === 0) {
-                    ipcRenderer.send('query', formQuery.current.update, [...formData, selected.current])
+                    ipcRenderer.send('queryNoReply', formQuery.current.update, [...formData, selected.current])
+                    setMode('Table')
                   }
                 })
             }} />

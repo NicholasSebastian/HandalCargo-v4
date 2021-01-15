@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable brace-style */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import React, { useState, useContext } from 'react'
@@ -8,23 +10,23 @@ import { ScrollControl } from './Layout'
 const Form = ({ FormFragment, returnFunction, initialData, queryOnClick }: FormProps): JSX.Element => {
   const scrollToTop = useContext(ScrollControl)!
 
-  const [formData, setFormData] = useState<Array<string>>(initialData || [])
-
-  const [onSubmit, setOnSubmit] = useState<() => 'ok' | Array<string>>()
+  const [onSubmit, setOnSubmit] = useState<SubmitFunction | null>(null)
   const [errorMessages, setErrorMessages] = useState<Array<string> | null>(null)
 
   function handleSave () {
     if (onSubmit) {
-      const error = onSubmit()
-      if (error === 'ok') setErrorMessages(null)
-      else {
-        setErrorMessages(error)
-        scrollToTop()
-        return
+      const result = onSubmit()
+      switch (result.code) {
+        case 'ok':
+          setErrorMessages(null)
+          queryOnClick!(result.data)
+          break
+        case 'err':
+          setErrorMessages(result.data)
+          scrollToTop()
+          break
       }
     }
-    queryOnClick!(formData)
-    returnFunction()
   }
 
   return (
@@ -36,8 +38,7 @@ const Form = ({ FormFragment, returnFunction, initialData, queryOnClick }: FormP
           </StyledError>
         }
         <FormFragment // All form elements should reflect the formData state.
-          formData={formData}
-          setFormData={setFormData}
+          formData={initialData || []}
           setOnSubmit={setOnSubmit} />
         <div>
           {queryOnClick && <button onClick={handleSave}>Save</button>}
@@ -93,6 +94,8 @@ const StyledFormArea = styled.div<{ editable: boolean }>`
     }
 
     img {
+      pointer-events: ${({ editable }) => editable ? 'auto' : 'none'};
+
       &:hover {
         cursor: ${({ editable }) => editable ? 'pointer' : 'default'};
       }
@@ -171,12 +174,20 @@ const StyledError = styled.ul`
 interface FormProps {
   FormFragment: React.FunctionComponent<FormFragmentProps>
   returnFunction: () => void
-  initialData?: Array<string>
-  queryOnClick?: (formData: Array<string>) => void
+  initialData?: Array<unknown>
+  queryOnClick?: QueryFunction
 }
 
 export interface FormFragmentProps {
-  formData: Array<string>
-  setFormData: React.Dispatch<React.SetStateAction<string[]>>
-  setOnSubmit: React.Dispatch<React.SetStateAction<(() => Array<string> | 'ok') | undefined>>
+  formData: Array<unknown>
+  setOnSubmit: React.Dispatch<React.SetStateAction<any | null>>
+}
+
+type QueryFunction = (formData: Array<unknown>) => void
+
+type SubmitFunction = () => Result
+
+interface Result {
+  code: 'ok' | 'err'
+  data: Array<any>
 }
