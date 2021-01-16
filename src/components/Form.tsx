@@ -20,6 +20,7 @@ const Form = ({ FormFragment, returnFunction, initialData, queryOnClick }: FormP
         case 'ok':
           setErrorMessages(null)
           queryOnClick!(result.data)
+          returnFunction()
           break
         case 'err':
           setErrorMessages(result.data)

@@ -54,7 +54,6 @@ const Template = ({
                 .then(({ response }) => {
                   if (response === 0) {
                     ipcRenderer.send('queryNoReply', formQuery.current.update, [...formData, selected.current])
-                    setMode('Table')
                   }
                 })
             }} />

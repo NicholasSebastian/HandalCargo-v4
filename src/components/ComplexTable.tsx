@@ -22,10 +22,12 @@ const Table = ({
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<(data: Array<never>) => Array<never>>(() => (data: Array<never>) => data)
 
-  useEffect(() => {
+  useEffect(refreshTable, [])
+
+  function refreshTable () {
     ipcRenderer.once(id, (event, data) => setData(data))
     ipcRenderer.send('query', tableQuery, [], id)
-  }, [])
+  }
 
   function handleDelete (primaryKey: string) {
     dialog.showMessageBox({
@@ -36,7 +38,7 @@ const Table = ({
       .then(({ response }) => {
         if (response === 0) {
           ipcRenderer.send('queryNoReply', deleteQuery, [primaryKey])
-          ipcRenderer.send('query', tableQuery, [], id)
+          refreshTable()
         }
       })
   }
@@ -56,7 +58,7 @@ const Table = ({
           </thead>
           <tbody>
             {data && filter(data)
-              .filter(row => new RegExp('^' + search).test(row[searchBy]))
+              .filter(row => new RegExp('^' + search, 'i').test(row[searchBy]))
               .map((row) =>
                 <tr key={row[primaryKey]} onClick={() => toViewPage(row[primaryKey])}>
                   <RowFragment row={row} />
