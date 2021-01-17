@@ -12,7 +12,7 @@ const tableElements = [`staffid`, `staffname`, `groupname`, `phonenum`, `status`
 const tableQueryArgs = 'LEFT JOIN `staffgroup` ON `staff`.`groupcode` = `staffgroup`.`stfgrcode`'
 
 const formElements = [
-  'staffid', 'pwd', 'level', 'profilepic', 'groupcode', 'staffname',
+  'staffid', 'pwd', 'level', 'profilepic', 'profilepictype', 'groupcode', 'staffname',
   'gender', 'phonenum', 'placeofbirth', 'dateofbirth', 'status', 'dateofemployment',
   'address1', 'district', 'city', 'salary', 'ot/hr', 'foodallowance', 'bonus', 'dilligencebonus'
 ]
@@ -27,6 +27,7 @@ const Staff = (): JSX.Element => {
       tableElements={tableElements}
       tableQueryArgs={tableQueryArgs}
       formElements={formElements}
+      // TODO: custom insertQuery and updateQuery here, wrap image buffer queries with BINARY()
       RowComponent={Row}
       FormComponent={Form}
       FilterComponent={Filter} />

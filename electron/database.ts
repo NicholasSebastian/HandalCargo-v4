@@ -1,9 +1,11 @@
+/* eslint-disable brace-style */
 /* eslint-disable no-multi-str */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-expressions */
 
 import { ipcMain, dialog } from 'electron'
 import mariadb from 'mariadb'
+import { decrypt } from 'sjcl'
 import '@babel/polyfill'
 
 import { windowInstance } from './main'
@@ -61,27 +63,30 @@ class Connection {
     }
   }
 
-  public onLogin (event: Electron.IpcMainEvent, username: string, password: string): void {
-    this.connection?.query('\
-      SELECT * FROM `staff` \
-      WHERE `staffid` = ? AND `pwd` = ?',
-      [username, password]
-    )
+  public onLogin (event: Electron.IpcMainEvent, username: string, password: string, key: string): void {
+    this.connection?.query('SELECT `pwd` FROM `staff` WHERE `staffid` = ?', [username])
       .then(async data => {
         if (data.length > 0) {
-          windowInstance.onLogin()
-          ipcMain.removeAllListeners('login')
-          const profileInfo =
-            await this.connection?.query('\
-              SELECT * FROM `staff` \
-              LEFT JOIN `staffgroup` \
-              ON `staff`.`groupcode` = `staffgroup`.`stfgrcode` \
-              WHERE `staffid` = ?',
-              [username]
-            )
-          event.reply('login-success', profileInfo[0])
+          const truePassword = decrypt(key, JSON.parse(data[0].pwd))
+          if (truePassword === password) {
+            windowInstance.onLogin()
+            ipcMain.removeAllListeners('login')
+            const profileInfo =
+              await this.connection?.query('\
+                SELECT * FROM `staff` \
+                LEFT JOIN `staffgroup` \
+                ON `staff`.`groupcode` = `staffgroup`.`stfgrcode` \
+                WHERE `staffid` = ?',
+                [username]
+              )
+            event.reply('login-success', profileInfo[0])
+          }
+          else {
+            dialog.showErrorBox('Invalid Login credentials', 'Invalid password.')
+            event.reply('login-failed')
+          }
         } else {
-          dialog.showErrorBox('Invalid Login credentials', 'Incorrect username or password.')
+          dialog.showErrorBox('Invalid Login credentials', 'Invalid username.')
           event.reply('login-failed')
         }
       })

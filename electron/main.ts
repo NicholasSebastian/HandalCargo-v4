@@ -13,7 +13,7 @@ app.on('ready', () => {
     connectionInstance = new Connection(event)
 
     // login/logout functionality
-    ipcMain.on('login', (event, username, password) => connectionInstance.onLogin(event, username, password))
+    ipcMain.on('login', (event, username, password, key) => connectionInstance.onLogin(event, username, password, key))
     ipcMain.once('logout', () => windowInstance.onLogout())
 
     // database query functionality

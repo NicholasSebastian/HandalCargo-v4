@@ -3,11 +3,13 @@
 import React, { useState, useEffect, useContext, memo } from 'react'
 import styled from 'styled-components'
 import { ipcRenderer } from 'electron'
+
 import { Settings } from '../components/Context'
 
 import Layout from '../components/Layout'
 import Loading from '../components/Loading'
 
+import { key } from '../Encryption.json'
 import LoginArt from '../assets/images/login_art.jpg'
 
 // TODO: State should not hold react components. Rewrite this component.
@@ -34,7 +36,7 @@ const Login = (): JSX.Element => {
             onChange={e => setPassword(e.target.value)} />
           <Button onClick={() => {
             setView(<Loading/>)
-            ipcRenderer.send('login', username, password)
+            ipcRenderer.send('login', username, password, key)
           }}>{localize('login')}</Button>
           <div>© Handal Cargo, All rights reserved.</div>
         </div>

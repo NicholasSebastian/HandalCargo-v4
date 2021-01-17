@@ -1,7 +1,7 @@
 /* eslint-disable no-extra-parens */
 /* eslint-disable padded-blocks */
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import { ipcRenderer, remote } from 'electron'
 import styled from 'styled-components'
 
@@ -13,10 +13,8 @@ const { dialog } = remote
 const HEADPANEL_HEIGHT = 30
 const SIDEPANEL_WIDTH = 200
 
-const Table = ({
-  id, columnNames, RowFragment, primaryKey, searchBy, FilterFragment,
-  tableQuery, deleteQuery, toAddPage, toViewPage, toEditPage
-}: TableProps): JSX.Element => {
+const Table = (props: TableProps): JSX.Element => {
+  const { RowFragment, FilterFragment } = props
 
   const [data, setData] = useState<Array<never>>()
   const [search, setSearch] = useState('')
@@ -25,8 +23,8 @@ const Table = ({
   useEffect(refreshTable, [])
 
   function refreshTable () {
-    ipcRenderer.once(id, (event, data) => setData(data))
-    ipcRenderer.send('query', tableQuery, [], id)
+    ipcRenderer.once(props.id, (event, data) => setData(data))
+    ipcRenderer.send('query', props.tableQuery, [], props.id)
   }
 
   function handleDelete (primaryKey: string) {
@@ -37,7 +35,7 @@ const Table = ({
     })
       .then(({ response }) => {
         if (response === 0) {
-          ipcRenderer.send('queryNoReply', deleteQuery, [primaryKey])
+          ipcRenderer.send('queryNoReply', props.deleteQuery, [primaryKey])
           refreshTable()
         }
       })
@@ -47,33 +45,37 @@ const Table = ({
     <StyledArea>
       <StyledHeader>
         <span>Total <span>{data?.length}</span></span>
-        <button onClick={toAddPage}>Add Record</button>
+        <button onClick={props.toAddPage}>Add Record</button>
       </StyledHeader>
       <StyledTable>
         <table>
           <thead>
             <tr>
-              {columnNames.map((colName, i) => <th key={i}>{colName}</th>)}
+              {props.columnNames.map((colName, i) => <th key={i}>{colName}</th>)}
             </tr>
           </thead>
           <tbody>
             {data && filter(data)
-              .filter(row => new RegExp('^' + search, 'i').test(row[searchBy]))
+              .filter(row => new RegExp('^' + search, 'i').test(row[props.searchBy]))
               .map((row) =>
-                <tr key={row[primaryKey]} onClick={() => toViewPage(row[primaryKey])}>
-                  <RowFragment row={row} />
-                  <button><FontAwesomeIcon icon={faEllipsisH} /></button>
-                  <div>
-                    <button onClick={e => {
-                      e.stopPropagation()
-                      toEditPage(row[primaryKey])
-                    }}>Edit</button>
-                    <button onClick={e => {
-                      e.stopPropagation()
-                      handleDelete(row[primaryKey])
-                    }}>Delete</button>
-                  </div>
-                </tr>
+                <Fragment key={row[props.primaryKey]}>
+                  <tr onClick={() => props.toViewPage(row[props.primaryKey])}>
+                    <RowFragment row={row} />
+                    <HoverPanel>
+                      <FontAwesomeIcon icon={faEllipsisH} /* TODO: Fix panel disappearing on hover issue */ />
+                      <div>
+                        <button onClick={e => {
+                          e.stopPropagation()
+                          props.toEditPage(row[props.primaryKey])
+                        }}>Edit</button>
+                        <button onClick={e => {
+                          e.stopPropagation()
+                          handleDelete(row[props.primaryKey])
+                        }}>Delete</button>
+                      </div>
+                    </HoverPanel>
+                  </tr>
+                </Fragment>
               )}
           </tbody>
         </table>
@@ -164,59 +166,62 @@ const StyledTable = styled.div`
       padding: 10px 0;
     }
 
-    tbody > tr {
-      transform: scale(1); // hack
+    tbody {
+      > tr {
+        position: relative;
+        transform: scale(1); // hack
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+`
+
+const HoverPanel = styled.button`
+  background: none;
+  border: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:hover > div {
+    display: block !important;
+  }
+
+  > div {
+    background-color: ${({ theme }) => theme.bg};
+    border: 1px solid ${({ theme }) => theme.fgWeak};
+    width: 80px;
+    padding: 5px;
+    border-radius: 2px;
+    display: none;
+    position: absolute;
+    top: 30px;
+    right: 0;
+
+    > button {
+      background: none;
+      width: 100%;
+      border: none;
+      border-radius: 2px;
+      padding: 5px;
+      font-size: 13px;
 
       &:hover {
         cursor: pointer;
+        background-color: ${({ theme }) => theme.fgWeak};
       }
+    }
 
-      > td:last-of-type {
-        position: relative;
-      }
-      
-      > button:last-of-type {
-        background: none;
-        border: none;
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-
-        &:hover ~ div {
-          display: block;
-        }
-      }
-
-      > div:last-child {
-          background-color: ${({ theme }) => theme.bg};
-          border: 1px solid ${({ theme }) => theme.fgWeak};
-          width: 80px;
-          padding: 5px;
-          border-radius: 2px;
-          display: none;
-          position: absolute;
-          top: 30px;
-          right: 0;
-
-          > button {
-            background: none;
-            width: 100%;
-            border: none;
-            border-radius: 2px;
-            padding: 5px;
-            font-size: 13px;
-
-            &:hover {
-              cursor: pointer;
-              background-color: ${({ theme }) => theme.fgWeak};
-            }
-          }
-
-          &:hover {
-            display: block;
-          }
-        }
+    &:hover {
+      display: block;
     }
   }
 `

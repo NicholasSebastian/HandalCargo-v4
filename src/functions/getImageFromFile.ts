@@ -16,18 +16,18 @@ const mimeTypes = {
   jpg: 'image/jpeg'
 }
 
-function bufferToBlob (buffer: Buffer, extension: string): Blob {
-  const byteCharacters = []
-  for (const charCode of buffer) {
-    byteCharacters.push(charCode)
-  }
+// function bufferToBlob (buffer: Buffer, extension: string): Blob {
+//   const byteCharacters = []
+//   for (const charCode of buffer) {
+//     byteCharacters.push(charCode)
+//   }
 
-  const byteArray = new Uint8Array(byteCharacters)
-  const blob = new Blob([byteArray], { type: mimeTypes[extension as never] })
-  return blob
-}
+//   const byteArray = new Uint8Array(byteCharacters)
+//   const blob = new Blob([byteArray], { type: mimeTypes[extension as never] })
+//   return blob
+// }
 
-export default function retrieveImage (callback: (blob: Blob) => void): void {
+export default function retrieveImage (callback: (buffer: Buffer, mimetype: string) => void): void {
   dialog.showOpenDialog(imageFilter)
     .then(({ filePaths, canceled }) => {
       if (canceled) return
@@ -39,8 +39,8 @@ export default function retrieveImage (callback: (blob: Blob) => void): void {
           return
         }
         const ext = path.extname(filePath).substr(1)
-        const blob = bufferToBlob(data, ext)
-        callback(blob)
+        const mimetype = mimeTypes[ext as never]
+        callback(data, mimetype)
       })
     })
 }

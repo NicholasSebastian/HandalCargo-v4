@@ -8,7 +8,7 @@ import * as url from 'url'
 import { connectionInstance } from './main'
 
 const loginWindowSize = { width: 700, height: 500 }
-const windowSize = { width: 1280, height: 720, minWidth: 1100, minHeight: 600 }
+const windowSize = { width: 1366, height: 768, minWidth: 1200, minHeight: 600 }
 
 class Window {
   window: Electron.BrowserWindow | null

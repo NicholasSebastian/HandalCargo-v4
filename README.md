@@ -7,7 +7,7 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
 - [x] Abstractions for management of window and database connection processes.
 - [x] Login Screen and Functionality.
   - [x] Loading transition.
-- [ ] Encryption for passwords.
+- [x] Encryption for passwords.
 - [x] Layout for the main application window.
   - [x] Header with Profile Button and Dropdown, etc.
   - [x] Sidebar with navigation links.

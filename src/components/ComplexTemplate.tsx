@@ -11,71 +11,78 @@ import { generateTableQuery, generateFormQueries } from '../functions/generateQu
 
 const { dialog } = remote
 
-const Template = ({
-  tableName, columnNames,
-  tableElements, tableQueryArgs, formElements,
-  RowComponent, FormComponent, primaryKey, searchBy, FilterComponent
-}: TemplateProps): JSX.Element => {
-
-  const tableQuery = useRef(generateTableQuery(tableName, tableElements, tableQueryArgs))
-  const formQuery = useRef(generateFormQueries(tableName, primaryKey, formElements))
+const Template = (props: TemplateProps): JSX.Element => {
 
   const [mode, setMode] = useState<Mode>('Table')
-  const selected = useRef<string>()
+
+  const formData = useRef<Array<unknown>>()
+  const target = useRef<string>()
+
+  const tableQuery = useRef(generateTableQuery(props.tableName, props.tableElements, props.tableQueryArgs))
+  const formQuery = useRef(generateFormQueries(props.tableName, props.primaryKey, props.formElements))
+
+  const returnToTable = () => setMode('Table')
+
+  function insertQuery (formData: Array<unknown>) {
+    ipcRenderer.send('queryNoReply', props.insertQuery || formQuery.current.insert, formData)
+  }
+
+  function updateQuery (formData: Array<unknown>) {
+    dialog.showMessageBox({
+      title: 'Update Record',
+      message: 'Are you sure you want to modify this record?',
+      buttons: ['Modify', 'Cancel']
+    })
+      .then(({ response }) => {
+        if (response === 0) {
+          ipcRenderer.send('queryNoReply', props.updateQuery || formQuery.current.update, [...formData, target.current])
+        }
+      })
+  }
 
   return (() => {
     switch (mode) {
       case 'Add':
         return (
           <Form
-            FormFragment={FormComponent}
-            returnFunction={() => setMode('Table')}
-            queryOnClick={formData => ipcRenderer.send('queryNoReply', formQuery.current.insert, formData)} />
+            FormFragment={props.FormComponent}
+            returnFunction={returnToTable}
+            queryOnClick={insertQuery} />
         )
       case 'View':
         return (
           <Form
-            FormFragment={FormComponent}
-            returnFunction={() => setMode('Table')}
-            initialData={Object.values(ipcRenderer.sendSync('querySync', formQuery.current.select, [selected.current])[0])} />
+            FormFragment={props.FormComponent}
+            returnFunction={returnToTable}
+            initialData={formData.current} />
         )
       case 'Edit':
         return (
           <Form
-            FormFragment={FormComponent}
-            returnFunction={() => setMode('Table')}
-            initialData={Object.values(ipcRenderer.sendSync('querySync', formQuery.current.select, [selected.current])[0])}
-            queryOnClick={formData => {
-              dialog.showMessageBox({
-                title: 'Update Record',
-                message: 'Are you sure you want to modify this record?',
-                buttons: ['Modify', 'Cancel']
-              })
-                .then(({ response }) => {
-                  if (response === 0) {
-                    ipcRenderer.send('queryNoReply', formQuery.current.update, [...formData, selected.current])
-                  }
-                })
-            }} />
+            FormFragment={props.FormComponent}
+            returnFunction={returnToTable}
+            initialData={formData.current}
+            queryOnClick={updateQuery} />
         )
       default:
         return (
-          <Table
-            id={tableName}
-            columnNames={columnNames}
+          <Table // Jesus Christ why does this have an insane number of props
+            id={props.tableName}
+            columnNames={props.columnNames}
+            primaryKey={props.primaryKey}
             tableQuery={tableQuery.current}
-            RowFragment={RowComponent}
-            primaryKey={primaryKey}
-            searchBy={searchBy}
-            FilterFragment={FilterComponent}
             deleteQuery={formQuery.current.delete}
+            RowFragment={props.RowComponent}
+            FilterFragment={props.FilterComponent}
+            searchBy={props.searchBy}
             toAddPage={() => setMode('Add')}
             toViewPage={primaryKeyValue => {
-              selected.current = primaryKeyValue
+              formData.current = Object.values(ipcRenderer.sendSync('querySync', formQuery.current.select, [primaryKeyValue])[0])
               setMode('View')
             }}
             toEditPage={primaryKeyValue => {
-              selected.current = primaryKeyValue
+              formData.current = Object.values(ipcRenderer.sendSync('querySync', formQuery.current.select, [primaryKeyValue])[0])
+              target.current = primaryKeyValue
               setMode('Edit')
             }} />
         )
@@ -92,6 +99,8 @@ interface TemplateProps {
   columnNames: Array<string>
   tableElements: Array<string>
   tableQueryArgs?: string
+  insertQuery?: string
+  updateQuery?: string
   formElements: Array<string>
   RowComponent: React.FunctionComponent<{ row: never }>
   FormComponent: React.FunctionComponent<FormFragmentProps>

@@ -4,6 +4,8 @@
 import React, { MutableRefObject, useEffect } from 'react'
 import styled from 'styled-components'
 
+import NoPhoto from '../assets/images/no-photo.png'
+
 const LABEL_WIDTH = 160
 
 interface HeadingProps {
@@ -156,12 +158,22 @@ const ComboBoxStyles = styled.div`
 interface ImagePickerProps {
   label: string
   Ref: MutableRefObject<any>
-  defaultValue: Blob
+  defaultValue: ImageBuffer | null
   OnClick: () => void
 }
 
+export interface ImageBuffer {
+  image: Buffer
+  type: string
+}
+
 export const ImagePicker = (props: ImagePickerProps): JSX.Element => {
-  useEffect(() => { if (props.defaultValue) props.Ref.current!.src = URL.createObjectURL(props.defaultValue) }, [])
+  useEffect(() => {
+    if (props.defaultValue) {
+      const { image, type } = props.defaultValue
+      props.Ref.current!.src = `data:${type};base64,${image.toString('base64')}`
+    } else props.Ref.current!.src = NoPhoto
+  }, [])
   return (
     <ImagePickerStyles>
       <label>{props.label}</label>
@@ -179,6 +191,7 @@ const ImagePickerStyles = styled.div`
   }
 
   > img {
+    background-color: ${({ theme }) => theme.fgWeak};
     width: 150px;
     height: 150px;
   }

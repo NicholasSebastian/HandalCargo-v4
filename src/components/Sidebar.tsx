@@ -39,7 +39,7 @@ const Sidebar = (): JSX.Element => {
     const requireMasterAccess = accessLevel.current === 2 && index > 2
     const requireManagerAccess = accessLevel.current === 1 && index > 1
     if (requireMasterAccess || requireManagerAccess) {
-      prompt({
+      prompt({ // TODO: change this ugly ass prompt
         title: 'Access Denied',
         label: 'Please enter the password:',
         type: 'input',
