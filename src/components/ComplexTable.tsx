@@ -62,19 +62,17 @@ const Table = ({
               .map((row) =>
                 <tr key={row[primaryKey]} onClick={() => toViewPage(row[primaryKey])}>
                   <RowFragment row={row} />
-                  <button>
-                    <FontAwesomeIcon icon={faEllipsisH} />
-                    <div>
-                      <button onClick={e => {
-                        e.stopPropagation()
-                        toEditPage(row[primaryKey])
-                      }}>Edit</button>
-                      <button onClick={e => {
-                        e.stopPropagation()
-                        handleDelete(row[primaryKey])
-                      }}>Delete</button>
-                    </div>
-                  </button>
+                  <button><FontAwesomeIcon icon={faEllipsisH} /></button>
+                  <div>
+                    <button onClick={e => {
+                      e.stopPropagation()
+                      toEditPage(row[primaryKey])
+                    }}>Edit</button>
+                    <button onClick={e => {
+                      e.stopPropagation()
+                      handleDelete(row[primaryKey])
+                    }}>Delete</button>
+                  </div>
                 </tr>
               )}
           </tbody>
@@ -177,7 +175,7 @@ const StyledTable = styled.div`
         position: relative;
       }
       
-      > button:last-child {
+      > button:last-of-type {
         background: none;
         border: none;
         position: absolute;
@@ -185,11 +183,12 @@ const StyledTable = styled.div`
         top: 0;
         bottom: 0;
 
-        &:hover > div {
+        &:hover ~ div {
           display: block;
         }
+      }
 
-        > div {
+      > div:last-child {
           background-color: ${({ theme }) => theme.bg};
           border: 1px solid ${({ theme }) => theme.fgWeak};
           width: 80px;
@@ -213,8 +212,11 @@ const StyledTable = styled.div`
               background-color: ${({ theme }) => theme.fgWeak};
             }
           }
+
+          &:hover {
+            display: block;
+          }
         }
-      }
     }
   }
 `

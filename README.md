@@ -89,7 +89,7 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
 ## Currently known problems to be fixed
 
 - [ ] Fix table edit and delete panel on hover.
-- [ ] Electron's setMinimumSize is bugged / not working.
+- [ ] Electron's setMinimumSize is bugged / not working (on windows only).
 - [x] Connection with database timeouts and ends on its own (ECONNRESET).
 - [ ] According to [this link](https://stackoverflow.com/questions/47875097/add-element-to-a-state-react), Components should not be stored in nor rendered from state. Hence, the Login page should be rewritten with respect to good practice.
 - [ ] Changing language or theme closes the currently open page.
