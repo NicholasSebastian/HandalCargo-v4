@@ -9,7 +9,6 @@ import { Settings } from '../components/Context'
 import Layout from '../components/Layout'
 import Loading from '../components/Loading'
 
-import { key } from '../Encryption.json'
 import LoginArt from '../assets/images/login_art.jpg'
 
 // TODO: State should not hold react components. Rewrite this component.
@@ -36,7 +35,7 @@ const Login = (): JSX.Element => {
             onChange={e => setPassword(e.target.value)} />
           <Button onClick={() => {
             setView(<Loading/>)
-            ipcRenderer.send('login', username, password, key)
+            ipcRenderer.send('login', username, password)
           }}>{localize('login')}</Button>
           <div>© Handal Cargo, All rights reserved.</div>
         </div>

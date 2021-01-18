@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable brace-style */
 /* eslint-disable no-multi-str */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -5,10 +6,10 @@
 
 import { ipcMain, dialog } from 'electron'
 import mariadb from 'mariadb'
-import { decrypt } from 'sjcl'
 import '@babel/polyfill'
 
 import { windowInstance } from './main'
+import { customDecrypt } from './encryption'
 
 import connectionSettings from './Connection.json'
 const DB_PING_INTERVAL = 60000
@@ -63,11 +64,16 @@ class Connection {
     }
   }
 
-  public onLogin (event: Electron.IpcMainEvent, username: string, password: string, key: string): void {
-    this.connection?.query('SELECT `pwd` FROM `staff` WHERE `staffid` = ?', [username])
+  public onLogin (event: Electron.IpcMainEvent, username: string, password: string): void {
+    this.connection?.query('SELECT `pwd`, `pwd_iv`, `pwd_salt` FROM `staff` WHERE `staffid` = ?', [username])
       .then(async data => {
-        if (data.length > 0) {
-          const truePassword = decrypt(key, JSON.parse(data[0].pwd))
+        if (Object.entries(data).length > 1) {
+          const encryptedTruePassword = {
+            cipherText: data[0].pwd,
+            initializeVector: data[0].pwd_iv,
+            salt: data[0].pwd_salt
+          }
+          const truePassword = customDecrypt(encryptedTruePassword)
           if (truePassword === password) {
             windowInstance.onLogin()
             ipcMain.removeAllListeners('login')

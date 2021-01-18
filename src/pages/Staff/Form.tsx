@@ -3,13 +3,11 @@
 
 import React, { useState, useEffect, useRef, Fragment } from 'react'
 import { ipcRenderer } from 'electron'
-import { encrypt, decrypt } from 'sjcl'
 
 import { FormFragmentProps } from '../../components/Form'
 import { Heading, Input, DoubleInput, ComboBox, DatePicker, ImagePicker, ImageBuffer } from '../../components/FormComponents'
 
 import retrieveImage from '../../functions/getImageFromFile'
-import { key } from '../../Encryption.json'
 
 const Form = ({ formData, setOnSubmit }: FormFragmentProps): JSX.Element => {
   useEffect(() => {
@@ -37,14 +35,16 @@ const Form = ({ formData, setOnSubmit }: FormFragmentProps): JSX.Element => {
 
         // Data submission
         const fullName = `${firstNameRef.current!.value} ${lastNameRef.current!.value}`
-        const encryptedPassword = encrypt(key, passwordRef.current!.value)
+        const encryptedPassword = ipcRenderer.sendSync('encrypt', passwordRef.current!.value)
         const { image, type: imageType } = imageBufferRef.current || { image: null, type: null }
 
         return {
           code: 'ok',
           data: [
             staffIdRef.current!.value,
-            JSON.stringify(encryptedPassword),
+            encryptedPassword.cipherText,
+            encryptedPassword.initializeVector,
+            encryptedPassword.salt,
             accessLevelRef.current!.value,
 
             image,
@@ -75,7 +75,14 @@ const Form = ({ formData, setOnSubmit }: FormFragmentProps): JSX.Element => {
 
   // Prepare data for the Form UI
   const staffName = getFirstLastName(formData[6] as string)
-  const decryptedPassword = formData[1] ? decrypt(key, JSON.parse(formData[1] as string)) : null
+  const decryptedPassword =
+    formData[1]
+      ? ipcRenderer.sendSync('decrypt', {
+        cipherText: formData[1] as string,
+        initializeVector: formData[2] as string,
+        salt: formData[3] as string
+      })
+      : null
 
   const [staffGroup, setStaffGroup] = useState<Array<StaffGroup> | null>(null)
   function fetchGroups () {

@@ -117,7 +117,7 @@ export const DatePicker = (props: DatePickerProps): JSX.Element => {
       <input
         type="date"
         ref={props.Ref}
-        defaultValue={props.defaultValue?.toISOString().substr(0, 10)} />
+        defaultValue={props.defaultValue ? props.defaultValue.toISOString().substr(0, 10) : undefined} />
     </DatePickerStyles>
   )
 }
