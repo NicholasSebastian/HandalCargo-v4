@@ -1,5 +1,5 @@
 import { encrypt, decrypt } from 'sjcl'
-import { key } from '../src/Encryption.json'
+import { key } from './Encryption.json'
 
 const params = { // default parameters, taken out to save space on DB.
   v: 1,

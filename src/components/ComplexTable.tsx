@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-extra-parens */
 /* eslint-disable padded-blocks */
 
@@ -20,7 +21,7 @@ const Table = (props: TableProps): JSX.Element => {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<(data: Array<never>) => Array<never>>(() => (data: Array<never>) => data)
 
-  useEffect(refreshTable, [])
+  useEffect(refreshTable, [props.view])
 
   function refreshTable () {
     ipcRenderer.once(props.id, (event, data) => setData(data))
@@ -57,24 +58,26 @@ const Table = (props: TableProps): JSX.Element => {
           <tbody>
             {data && filter(data)
               .filter(row => new RegExp('^' + search, 'i').test(row[props.searchBy]))
-              .map((row) =>
+              .map((row, i) =>
                 <Fragment key={row[props.primaryKey]}>
-                  <tr onClick={() => props.toViewPage(row[props.primaryKey])}>
-                    <RowFragment row={row} />
-                    <HoverPanel>
-                      <FontAwesomeIcon icon={faEllipsisH} /* TODO: Fix panel disappearing on hover issue */ />
-                      <div>
-                        <button onClick={e => {
-                          e.stopPropagation()
-                          props.toEditPage(row[props.primaryKey])
-                        }}>Edit</button>
-                        <button onClick={e => {
-                          e.stopPropagation()
-                          handleDelete(row[props.primaryKey])
-                        }}>Delete</button>
-                      </div>
-                    </HoverPanel>
-                  </tr>
+                  <StyledRow zIndex={data.length - i}
+                    onClick={() => props.toViewPage(row[props.primaryKey])}>
+                    <RowFragment row={row} PutThisInLastTd={() =>
+                      <HoverPanel>
+                        <FontAwesomeIcon icon={faEllipsisH} />
+                        <div>
+                          <button onClick={e => {
+                            e.stopPropagation()
+                            props.toEditPage(row[props.primaryKey])
+                          }}>Edit</button>
+                          <button onClick={e => {
+                            e.stopPropagation()
+                            handleDelete(row[props.primaryKey])
+                          }}>Delete</button>
+                        </div>
+                      </HoverPanel>
+                    } />
+                  </StyledRow>
                 </Fragment>
               )}
           </tbody>
@@ -165,27 +168,30 @@ const StyledTable = styled.div`
       border-bottom: 1px solid ${({ theme }) => theme.fgWeak}; 
       padding: 10px 0;
     }
-
-    tbody {
-      > tr {
-        position: relative;
-        transform: scale(1); // hack
-
-        &:hover {
-          cursor: pointer;
-        }
-      }
-    }
   }
 `
 
-const HoverPanel = styled.button`
+const StyledRow = styled.tr<{ zIndex: number }>`
+  &:hover {
+    cursor: pointer;
+  }
+
+  > td:last-child {
+    position: relative;
+    z-index: ${({ zIndex }) => zIndex};
+  }
+`
+
+const HoverPanel = styled.div`
   background: none;
   border: none;
+  display: flex;
+  align-items: center;
   position: absolute;
   right: 0;
   top: 0;
   bottom: 0;
+  z-index: 1;
 
   &:hover {
     cursor: pointer;
@@ -274,17 +280,23 @@ const StyledPanel = styled.div`
 `
 
 interface TableProps {
-  id: string,
-  columnNames: Array<string>
-  tableQuery: string
-  RowFragment: React.FunctionComponent<{ row: never }>
+  id: string
+  view: string
   primaryKey: string
-  searchBy: string
+  tableQuery: string
   deleteQuery: string
   toAddPage: () => void
   toViewPage: (selected: string) => void
   toEditPage: (selected: string) => void
+  columnNames: Array<string>
+  RowFragment: React.FunctionComponent<RowFragmentProps>
+  searchBy: string
   FilterFragment: React.FunctionComponent<FilterFragmentProps>
+}
+
+export interface RowFragmentProps {
+  row: any
+  PutThisInLastTd: any
 }
 
 export interface FilterFragmentProps {

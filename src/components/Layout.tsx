@@ -15,6 +15,7 @@ import Loading from './Loading'
 const Welcome = lazy(() => import('../pages/Welcome'))
 const Dashboard = lazy(() => import('../pages/Dashboard'))
 const Profile = lazy(() => import('../pages/Profile'))
+const Customers = lazy(() => import('../pages/Customers/Index'))
 const Staff = lazy(() => import('../pages/Staff/Index'))
 
 const HEADER_HEIGHT = 50
@@ -76,6 +77,7 @@ const Layout = (): JSX.Element => {
                   <Route path="/" exact component={ WelcomeOrDashboard } />
                   <Route path="/dashboard" component={ Dashboard } />
                   <Route path="/profile" component={ Profile } />
+                  <Route path="/customers" component={ Customers } />
                   <Route path="/staff" component={ Staff } />
                 </Switch>
               </Suspense>

@@ -9,16 +9,6 @@ import { FilterFragmentProps } from '../../components/ComplexTable'
 
 const Filter = ({ setFilter }: FilterFragmentProps): JSX.Element => {
 
-  // Prepare data for the filter UI.
-  const [staffGroup, setStaffGroup] = useState<Array<string>>([])
-  useEffect(() => {
-    ipcRenderer.once('staffFilterQuery', (event, data) => {
-      setStaffGroup(data.map((d: any) => d.groupname))
-      setJobFilter(Array(data.length).fill(false))
-    })
-    ipcRenderer.send('query', 'SELECT `groupname` FROM `staffgroup`', [], 'staffFilterQuery')
-  }, [])
-
   // Setting the filter according to UI.
   const [jobFilter, setJobFilter] = useState<Array<boolean>>([])
   const [activeFilter, setActiveFilter] = useState<[boolean, boolean]>([false, false])
@@ -48,6 +38,16 @@ const Filter = ({ setFilter }: FilterFragmentProps): JSX.Element => {
       }
     )
   }
+
+  // Prepare data for the filter UI.
+  const [staffGroup, setStaffGroup] = useState<Array<string>>([])
+  useEffect(() => {
+    ipcRenderer.once('staffFilterQuery', (event, data) => {
+      setStaffGroup(data.map((d: any) => d.groupname))
+      setJobFilter(Array(data.length).fill(false))
+    })
+    ipcRenderer.send('query', 'SELECT `groupname` FROM `staffgroup`', [], 'staffFilterQuery')
+  }, [])
 
   // Filter panel UI.
   return (

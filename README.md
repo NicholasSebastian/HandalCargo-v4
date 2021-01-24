@@ -13,7 +13,7 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
   - [x] Sidebar with navigation links.
   - [x] Tabs and Page Headers
 - [x] Context wrapper for theme and languages.
-- [ ] Lock the sidebar links according to access level.
+- [x] Lock the sidebar links according to access level.
   - L1: Shipping and References Page.
   - L2: L1 + Reports Page.
   - L3: L2 + Master and Settings Page.
@@ -67,12 +67,12 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
 
 ## Miscellaneous Tasks
 
-- [ ] Transition animations??
 - [x] Dark Theme color scheme.
 - [ ] Localization translation map.
 - [x] Login page image.
 - [ ] Figure out a way to backup/restore database outside of cPanel.
 - [x] Display the loading animation in between route changes.
+- [ ] Change electron-prompt with something else, it looks weird.
 - [ ] Application icon.
 - [ ] Optimization: Change some components to PureComponents or React.memo to minimize dumb re-renders.
 - [ ] Optimization: Rewrite template components to use the Higher Order Components (HOC) design pattern.
@@ -85,13 +85,13 @@ The fourth and hopefully final reiteration of PT. Handal Cargo's proprietary ERP
   - [ ] Styled combobox
   - [ ] Styled date picker
   - [ ] Styled checkbox
+- [ ] According to [this link](https://stackoverflow.com/questions/47875097/add-element-to-a-state-react), Components should not be stored in nor rendered from state. Hence, the Login page should be rewritten with respect to good practice.
 
 ## Currently known problems to be fixed
 
-- [ ] Fix table edit and delete panel on hover.
+- [x] Fix table edit and delete panel on hover.
 - [ ] Electron's setMinimumSize is bugged / not working (on windows only).
 - [x] Connection with database timeouts and ends on its own (ECONNRESET).
-- [ ] According to [this link](https://stackoverflow.com/questions/47875097/add-element-to-a-state-react), Components should not be stored in nor rendered from state. Hence, the Login page should be rewritten with respect to good practice.
 - [ ] Changing language or theme closes the currently open page.
 - [ ] Closing a tab also routes to the page.
 - [ ] Should route to '/' page when closing the currently open tab but blinks out immediately instead.

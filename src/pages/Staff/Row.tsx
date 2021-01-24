@@ -6,7 +6,9 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
-const Row = ({ row }: RowProps): JSX.Element => {
+import { RowFragmentProps } from '../../components/ComplexTable'
+
+const Row = ({ row, PutThisInLastTd }: RowFragmentProps): JSX.Element => {
   return (
     <Fragment>
       <td>{row.staffid}</td>
@@ -17,7 +19,9 @@ const Row = ({ row }: RowProps): JSX.Element => {
         row.status
           ? <><GreenIcon icon={faCheckCircle} /> Active</>
           : <><RedIcon icon={faTimesCircle} /> Inactive</>
-      }</td>
+      }
+      <PutThisInLastTd />
+      </td>
     </Fragment>
   )
 }
@@ -31,7 +35,3 @@ const GreenIcon = styled(FontAwesomeIcon)`
 const RedIcon = styled(FontAwesomeIcon)`
   color: ${({ theme }) => theme.red};
 `
-
-interface RowProps {
-  row: any
-}
